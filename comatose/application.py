@@ -50,9 +50,10 @@ def run_app(ns):
 
 if __name__ == '__main__':
     from wrapper import publish
+    from arg_types import ParsedDateTime
 
-    @publish(['get'])
-    def func(a: str, b: int = 10):
-        return {'a':a, 'b':b}
+    @publish(['GET'])
+    def func(a: str, b: ParsedDateTime, c: int = 10):
+        return {'a':a, 'b':b.strftime('%c'), 'c':c}
 
     run_app(func)

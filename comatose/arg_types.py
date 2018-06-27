@@ -1,5 +1,5 @@
-import dateutil
-import datetime
+from dateutil.parser import parse
+from datetime import datetime
 from typing import List, Generic, TypeVar
 import base64
 import numpy as np
@@ -24,18 +24,20 @@ class NDArray(Base64Bytes, Generic[T]):
         _bytes = super().__new__(Base64Bytes, utf8_string)
         return np.fromstring(_bytes, dtype=dtype)
 
-class ParsedDateTime(datetime.datetime):
+class ParsedDateTime(datetime):
     '''A flexible dateteime.datetime class
 
     If the constructor
 
     recieves a string: use dateutil to parse
     receives an integer: use datetime.datetime'''
+    __schema__ = {'type':'string', 'format':'Anything accepted by dateutil.parser.parse()'}
+
     def __new__(cls, *args):
         if isinstance(args[0], str) and len(args)==1:
-            return dateutil.parser.parse(args[0])
+            return parse(args[0])
         else:
-            return super().__new__(datetime.datetime, *args)
+            return super().__new__(datetime, *args)
 
 class TypedList(List, Generic[T]):
     '''An instantiable typed list
