@@ -1,11 +1,10 @@
-from argparse import ArugmentParser
-from application import make_app
+from argparse import ArgumentParser, FileType
 
 def cli():
     # arg parser for the standard anaconda-project options
     parser = ArgumentParser(prog="api",
                             description="Serve API from script file")
-    parser.add_argument('filename', help='File with published functions', type=argparse.FileType('r'))
+    parser.add_argument('filename', help='File with published functions', type=FileType('r'))
     parser.add_argument('--anaconda-project-host', action='append', default=[],
                         help='Hostname to allow in requests')
     parser.add_argument('--anaconda-project-port', action='store', default=8086, type=int,
@@ -29,9 +28,3 @@ def cli():
 
     return parser
 
-def main():
-    args = cli().parse_args()
-
-    ## read and execute filename
-
-    app.run(host=args.anaconda_project_address, port=args.anaconda_project_port)

@@ -1,15 +1,7 @@
-# -*- coding: utf-8 -*-
-# -----------------------------------------------------------------------------
-# Copyright 2016 Continuum Analytics, Inc.
-#
-# All Rights Reserved.
-# -----------------------------------------------------------------------------
 import ast
 import json
 from inspect import signature
 from collections import Mapping, Sequence
-from namespace import make_api_namespace
-
 
 def prepare_arg(arg):
     '''Return a keyword arg spec (dict)'''
@@ -54,21 +46,3 @@ def prepare(fn):
     spec['args'] = _args
 
     return spec
-
-
-def publish(methods=None):
-    """Decorator function that gets a function wraps it in order to
-    append a function spec (see prepare function) and autocast args/kws
-    to match types.
-    """
-    if not methods:
-        methods = ["GET"]
-
-    def expose_wrapper(f):
-        f._spec = prepare(f)
-        f._methods = methods
-
-        return make_api_namespace(f)
-
-    return expose_wrapper
-

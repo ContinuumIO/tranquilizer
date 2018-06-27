@@ -4,7 +4,7 @@ from werkzeug.contrib.fixers import ProxyFix
 from flask_restplus import Api
 
 
-def make_app(ns):
+def make_app():
     api = Api(title='comatose api')
     api.add_namespace(ns)
 
