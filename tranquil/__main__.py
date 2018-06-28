@@ -10,7 +10,7 @@ def main():
 
     sys.path.append(dirname(args.filename))
     functions = get_tranquilized_functions(args.filename)
-    app = make_app(functions)
+    app = make_app(functions, prefix=args.anaconda_project_url_prefix)
 
     app.run(host=args.anaconda_project_address, port=args.anaconda_project_port)
 

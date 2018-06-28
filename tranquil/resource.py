@@ -33,7 +33,6 @@ def make_resource(func, api):
     def _method(self):
         '''{}'''.format(func._spec['docstring'])
         request = parser.parse_args()
-        print(request)
         output = func(**request)
         return jsonify(output)
 
