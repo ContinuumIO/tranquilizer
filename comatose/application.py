@@ -1,9 +1,9 @@
 from flask import Flask
 from werkzeug.contrib.fixers import ProxyFix
-from flask_restplus import Api
+from flask_restplus import Api, Namespace
 from argparse import ArgumentParser
 
-from .namespace import make_api_namespace
+from .resource import make_resource
 
 def cli():
     # arg parser for the standard anaconda-project options
@@ -40,8 +40,11 @@ def make_app(functions):
     app.config['PREFERRED_URL_SCHEME'] = 'https'
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
+    ns = Namespace('/', 'Comatose generated API')
+
     for f in functions:
-        ns = make_api_namespace(f)
+        resource = make_resource(f, ns)
+        ns.add_resource(resource, '/{}'.format(f._spec['name']))
         api.add_namespace(ns)
 
     api.init_app(app)

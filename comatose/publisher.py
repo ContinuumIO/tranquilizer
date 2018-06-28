@@ -48,19 +48,19 @@ def prepare(fn):
     return spec
 
 
-def publish(methods=None):
+def publish(method=None):
     """Decorator function that gets a function wraps it in order to
     append a function spec (see prepare function) and autocast args/kws
     to match types.
     """
-    if not methods:
-        methods = ["get"]
+    if not method:
+        method = "get"
     else:
-        methods = [m.lower() for m in methods]
+        method = method.lower()
 
     def expose_wrapper(f):
         f._spec = prepare(f)
-        f._methods = methods
+        f._method = method
         return f
 
     return expose_wrapper

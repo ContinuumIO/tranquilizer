@@ -1,3 +1,4 @@
+from collections import Mapping, Sequence
 from dateutil.parser import parse
 from datetime import datetime
 from typing import List, Generic, TypeVar
@@ -6,6 +7,15 @@ import numpy as np
 
 T = TypeVar('T')
 S = TypeVar('S')
+
+def is_container(type_):
+    '''Test if provided type function is a scalar
+
+    strings and bytes are considered to be scalars.'''
+    container = issubclass(type_, Sequence) or (issubclass(type_, Mapping))
+    basic_scalars = issubclass(type_, str) or issubclass(type_, bytes)
+
+    return  (not basic_scalars) and container
 
 class Bytes(bytes, Generic[T]):
     '''Base Class for byte string with custom decoding'''
@@ -24,6 +34,7 @@ class NDArray(Base64Bytes, Generic[T]):
         _bytes = super().__new__(Base64Bytes, utf8_string)
         return np.fromstring(_bytes, dtype=dtype)
 
+
 class ParsedDateTime(datetime):
     '''A flexible dateteime.datetime class
 
@@ -31,7 +42,7 @@ class ParsedDateTime(datetime):
 
     recieves a string: use dateutil to parse
     receives an integer: use datetime.datetime'''
-    __schema__ = {'type':'date', 'format':'Anything accepted by dateutil.parser.parse()'}
+    __schema__ = {'type':'string', 'format':'date-time'}
 
     def __new__(cls, *args):
         if isinstance(args[0], str) and len(args)==1:
@@ -39,20 +50,18 @@ class ParsedDateTime(datetime):
         else:
             return super().__new__(datetime, *args)
 
+
 class TypedList(List, Generic[T]):
-    '''An instantiable typed list
+    '''An dummy typed list
 
     This class supports specialization with [].
 
     fList = List[float]
 
-    It will then attempt to convert elements of
-    a list passed to the constructor
+    It is expected to only receive one input.'''
+    __schema__ = {'type':'string'}
 
-    list_of_floats = fList([0,1,2])'''
     def __new__(cls, *args, **kwds):
         _type = cls.__args__[0]
-        _list = super().__new__(cls, *args, **kwds)
-
-        return [_type(i) for i in _list]
+        return _type(*args)
 
