@@ -3,6 +3,8 @@ import json
 from inspect import signature
 from collections import Mapping, Sequence
 
+from namespace import make_api_namespace
+
 def prepare_arg(arg):
     '''Return a keyword arg spec (dict)'''
     _arg = {
@@ -46,3 +48,22 @@ def prepare(fn):
     spec['args'] = _args
 
     return spec
+
+
+def publish(methods=None):
+    """Decorator function that gets a function wraps it in order to
+    append a function spec (see prepare function) and autocast args/kws
+    to match types.
+    """
+    if not methods:
+        methods = ["get"]
+    else:
+        methods = [m.lower() for m in methods]
+
+    def expose_wrapper(f):
+        f._spec = prepare(f)
+        f._methods = methods
+        return f
+
+    return expose_wrapper
+

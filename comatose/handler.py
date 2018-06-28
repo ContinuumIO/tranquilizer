@@ -1,5 +1,4 @@
 '''execute the script file'''
-
 import ast
 import traceback
 
