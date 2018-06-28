@@ -1,15 +1,15 @@
 from flask import Flask
 from werkzeug.contrib.fixers import ProxyFix
 from flask_restplus import Api
-from argparse import ArgumentParser, FileType
+from argparse import ArgumentParser
 
 from namespace import make_api_namespace
 
 def cli():
     # arg parser for the standard anaconda-project options
-    parser = ArgumentParser(prog="api",
+    parser = ArgumentParser(prog="comatose",
                             description="Serve API from script file")
-    parser.add_argument('filename', help='File with published functions', type=FileType('r'))
+    parser.add_argument('filename', help='File with published functions')
     parser.add_argument('--anaconda-project-host', action='append', default=[],
                         help='Hostname to allow in requests')
     parser.add_argument('--anaconda-project-port', action='store', default=8086, type=int,
@@ -53,9 +53,12 @@ if __name__ == '__main__':
     from arg_types import ParsedDateTime
     from publisher import publish
 
+    def as_iso(dt):
+        return dt.strftime('%c')
+
     @publish(['get'])
     def func1(a: str, b: ParsedDateTime, c: int = 10):
-        return {'a':a, 'b':b.strftime('%c'), 'c':c}
+        return {'a':a, 'b':as_iso(b), 'c':c}
 
     @publish(['get'])
     def func2(d, e):
