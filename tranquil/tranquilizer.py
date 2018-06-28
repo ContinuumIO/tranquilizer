@@ -48,7 +48,7 @@ def prepare(fn):
     return spec
 
 
-def publish(method=None):
+def tranquilize(method=None):
     """Decorator function that gets a function wraps it in order to
     append a function spec (see prepare function) and autocast args/kws
     to match types.
@@ -58,10 +58,10 @@ def publish(method=None):
     else:
         method = method.lower()
 
-    def expose_wrapper(f):
+    def _dart(f):
         f._spec = prepare(f)
         f._method = method
         return f
 
-    return expose_wrapper
+    return _dart
 

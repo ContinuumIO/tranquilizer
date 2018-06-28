@@ -1,7 +1,7 @@
 {% set setup_py = load_setup_py_data() %}
 
 package:
-    name: 'comatose'
+    name: 'tranquil'
     version: {{ setup_py.get('version') }}
 
 source:
@@ -10,7 +10,7 @@ source:
 build:
     script: python setup.py install --single-version-externally-managed --record=record.txt
     entry_points:
-        - comatose = comatose.__main__:main
+        - tranquil = tranquil.__main__:main
 
 requirements:
     run:

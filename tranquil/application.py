@@ -7,9 +7,9 @@ from .resource import make_resource
 
 def cli():
     # arg parser for the standard anaconda-project options
-    parser = ArgumentParser(prog="comatose",
+    parser = ArgumentParser(prog="tranquil",
                             description="Serve API from script file")
-    parser.add_argument('filename', help='File with published functions')
+    parser.add_argument('filename', help='File with tranquilized functions')
     parser.add_argument('--anaconda-project-host', action='append', default=[],
                         help='Hostname to allow in requests')
     parser.add_argument('--anaconda-project-port', action='store', default=8086, type=int,
@@ -35,12 +35,12 @@ def cli():
 
 
 def make_app(functions):
-    api = Api(title='comatose api')
+    api = Api(title='tranquil api')
     app = Flask(__name__)
     app.config['PREFERRED_URL_SCHEME'] = 'https'
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
-    ns = Namespace('/', 'Comatose generated API')
+    ns = Namespace('/', 'Tranquil API')
 
     for f in functions:
         resource = make_resource(f, ns)

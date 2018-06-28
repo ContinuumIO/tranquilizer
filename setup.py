@@ -9,20 +9,20 @@ from setuptools import setup, find_packages
 
 
 setup(
-    name='comatose',
+    name='tranquil',
     author='Albert DeFusco',
     author_email='adefusco@anaconda.com',
     description='Serve REST API using decorated functions',
-    url='https://github.com/ContinuumIO/Comatose',
+    url='https://github.com/ContinuumIO/tranquil',
     license='MIT',
-    version=find_version('comatose', '__init__.py'),
+    version=find_version('tranquil', '__init__.py'),
     packages=find_packages(),
     entry_points={
         #'anaconda_project.plugins.command_run': [
-        #    'rest_api = comatose.__main__:init_command',
+        #    'tranquil_api = tranquil.__main__:init_command',
         #],
         'console_scripts': [
-            'comatose = comatose.__main__:main'
+            'tranquil = tranquil.__main__:main'
         ]
     },
     scripts=[]

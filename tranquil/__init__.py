@@ -1,5 +1,5 @@
-from .publisher import publish
+from .tranquilizer import tranquilize
 from .types import Bytes, NDArray, ParsedDateTime, TypedList
 
-__version__ = '0.3'
+__version__ = '0.4'
 

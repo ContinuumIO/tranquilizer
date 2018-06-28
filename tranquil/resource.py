@@ -37,7 +37,7 @@ def make_resource(func, api):
         output = func(**request)
         return jsonify(output)
 
-    Comatose = type('Comatose', (Resource,), {func._method:_method})
+    Tranquil = type('Tranquil', (Resource,), {func._method:_method})
 
-    return Comatose
+    return Tranquil
 
