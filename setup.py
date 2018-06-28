@@ -14,6 +14,7 @@ setup(
     author_email='adefusco@anaconda.com',
     description='Serve REST API using decorated functions',
     url='https://github.com/ContinuumIO/Comatose',
+    license='MIT',
     version=find_version('comatose', '__init__.py'),
     packages=find_packages(),
     entry_points={

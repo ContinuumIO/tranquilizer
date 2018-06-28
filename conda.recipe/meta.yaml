@@ -1,0 +1,30 @@
+{% set setup_py = load_setup_py_data() %}
+
+package:
+    name: 'comatose'
+    version: {{ setup_py.get('version') }}
+
+source:
+    path: ../
+
+build:
+    script: python setup.py install --single-version-externally-managed --record=record.txt
+    entry_points:
+        - comatose = comatose.__main__:main
+
+requirements:
+    run:
+        - python
+        - flask
+        - werkzeug
+        - python-dateutil
+        - numpy
+        - flask-restplus
+    build:
+        - python
+        - setuptools
+
+about:
+    license: {{ setup_py.get('license') }}
+    license_file: LICENSE
+    summary: {{ setup_py.get('description') }}
