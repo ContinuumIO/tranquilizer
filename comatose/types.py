@@ -31,7 +31,7 @@ class ParsedDateTime(datetime):
 
     recieves a string: use dateutil to parse
     receives an integer: use datetime.datetime'''
-    __schema__ = {'type':'string', 'format':'Anything accepted by dateutil.parser.parse()'}
+    __schema__ = {'type':'date', 'format':'Anything accepted by dateutil.parser.parse()'}
 
     def __new__(cls, *args):
         if isinstance(args[0], str) and len(args)==1:
@@ -55,3 +55,4 @@ class TypedList(List, Generic[T]):
         _list = super().__new__(cls, *args, **kwds)
 
         return [_type(i) for i in _list]
+

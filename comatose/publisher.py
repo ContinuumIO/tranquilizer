@@ -3,8 +3,6 @@ import json
 from inspect import signature
 from collections import Mapping, Sequence
 
-from namespace import make_api_namespace
-
 def prepare_arg(arg):
     '''Return a keyword arg spec (dict)'''
     _arg = {

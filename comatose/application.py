@@ -3,7 +3,7 @@ from werkzeug.contrib.fixers import ProxyFix
 from flask_restplus import Api
 from argparse import ArgumentParser
 
-from namespace import make_api_namespace
+from .namespace import make_api_namespace
 
 def cli():
     # arg parser for the standard anaconda-project options
@@ -48,21 +48,3 @@ def make_app(functions):
 
     return app
 
-
-if __name__ == '__main__':
-    from arg_types import ParsedDateTime
-    from publisher import publish
-
-    def as_iso(dt):
-        return dt.strftime('%c')
-
-    @publish(['get'])
-    def func1(a: str, b: ParsedDateTime, c: int = 10):
-        return {'a':a, 'b':as_iso(b), 'c':c}
-
-    @publish(['get'])
-    def func2(d, e):
-        return {'d':d, 'e':e}
-
-    app = make_app([func1, func2])
-    app.run()

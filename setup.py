@@ -4,35 +4,25 @@
 #
 # All Rights Reserved.
 # -----------------------------------------------------------------------------
-import versioneer
+from version import find_version
 from setuptools import setup, find_packages
-from setuptools.command.develop import VersionlessRequirement, develop as DevelopCommand
 
-
-class FixedDevelopCommand(DevelopCommand):
-    def install_script(self, dist, script_name, script_text, dev_path=None):
-        DevelopCommand.install_script(self, VersionlessRequirement(dist), script_name, script_text, dev_path)
-
-
-cmdclass = versioneer.get_cmdclass()
-cmdclass['develop'] = FixedDevelopCommand
 
 setup(
     name='comatose',
     author='Albert DeFusco',
     author_email='adefusco@anaconda.com',
-    description='',
+    description='Serve REST API using decorated functions',
     url='https://github.com/ContinuumIO/Comatose',
-    version=versioneer.get_version(),
-    cmdclass=cmdclass,
+    version=find_version('comatose', '__init__.py'),
     packages=find_packages(),
-    namespace_packages=['comatose'],
-    include_package_data=True,
-    zip_safe=False,
-    package_data={},
     entry_points={
-        'anaconda_project.plugins.command_run': [
-            'rest_api = comatose.application:init_command',
-        ],
+        #'anaconda_project.plugins.command_run': [
+        #    'rest_api = comatose.__main__:init_command',
+        #],
+        'console_scripts': [
+            'comatose = comatose.__main__:main'
+        ]
     },
-    scripts=[])
+    scripts=[]
+)
