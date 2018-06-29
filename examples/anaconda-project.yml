@@ -1,0 +1,25 @@
+name: Tranquilizer
+description: Put your functions to REST
+
+channels:
+    - defaults
+    - defusco
+    - conda-forge
+packages:
+    - python=3.6
+    - tranquilizer
+
+platforms:
+  - linux-64
+  - osx-64
+  - win-64
+
+env_specs:
+  default:
+    packages: []
+    channels: []
+
+commands:
+  type-conversion:
+    unix: tranquilizer type_conversion.py
+    supports_http_options: true
