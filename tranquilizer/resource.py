@@ -14,12 +14,18 @@ def _make_parser(func_spec, location='args'):
     for argument,spec in func_spec['args'].items():
         _type = spec.get('annotation', str)
         _default = spec.get('default', None)
-        action = 'append' if is_container(_type) else 'store'
+        action = 'store'
 
         try:
             description = getattr(_type, '__description__')
         except AttributeError:
             description = None
+
+        if is_container(_type):
+            action = 'append'
+            type_name = _type.__args__[0].__name__
+            _type.__schema__ = {'type':type_name}
+            description = 'List of {}'.format(type_name)
 
         parser.add_argument(argument, type=_type,
                             default=_default,
