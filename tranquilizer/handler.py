@@ -2,7 +2,7 @@
 import ast
 from runpy import run_path
 
-def parse_script(fn):
+def _parse_script(fn):
     with open(fn, 'r') as f:
         source = f.read()
 
@@ -20,7 +20,7 @@ def _is_decorated(item):
 
 
 def get_tranquilized_functions(fn):
-    nodes = parse_script(fn)
+    nodes = _parse_script(fn)
     tranquilized = [f.name for f in nodes.body if _is_decorated(f)]
 
     module = run_path(fn)

@@ -17,6 +17,7 @@ def is_container(type_):
 
     return  (not basic_scalars) and container
 
+
 class Bytes(bytes, Generic[T]):
     '''Base Class for byte string with custom decoding'''
     def __new__(cls, utf8_string):
@@ -24,7 +25,9 @@ class Bytes(bytes, Generic[T]):
         # the kernelgateway always sends UFT8 strings
         return decoder(utf8_string.encode())
 
+
 Base64Bytes = Bytes[base64.decodebytes]
+
 
 class NDArray(Base64Bytes, Generic[T]):
     '''NumPy arrays as base64 byte string'''

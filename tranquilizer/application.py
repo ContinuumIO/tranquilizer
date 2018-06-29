@@ -6,10 +6,11 @@ from argparse import ArgumentParser
 from .resource import make_resource
 
 def cli():
+    parser = ArgumentParser(prog="tranquilizer",
+                            description="Put your functions to REST")
+    parser.add_argument('filename', help='Script file with tranquilized functions')
+
     # arg parser for the standard anaconda-project options
-    parser = ArgumentParser(prog="tranquil",
-                            description="Serve API from script file")
-    parser.add_argument('filename', help='File with tranquilized functions')
     parser.add_argument('--anaconda-project-host', action='append', default=[],
                         help='Hostname to allow in requests')
     parser.add_argument('--anaconda-project-port', action='store', default=8086, type=int,
@@ -35,12 +36,12 @@ def cli():
 
 
 def make_app(functions, prefix='/'):
-    api = Api(title='tranquil api')
+    api = Api(title='tranquilized api')
     app = Flask(__name__)
     app.config['PREFERRED_URL_SCHEME'] = 'https'
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
-    ns = Namespace(prefix, 'Tranquil API')
+    ns = Namespace(prefix, 'Tranquilized API')
 
     for f in functions:
         resource = make_resource(f, ns)

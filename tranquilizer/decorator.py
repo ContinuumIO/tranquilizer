@@ -3,7 +3,7 @@ import json
 from inspect import signature
 from collections import Mapping, Sequence
 
-def prepare_arg(arg):
+def _prepare_arg(arg):
     '''Return a keyword arg spec (dict)'''
     _arg = {
         "name": arg.name,
@@ -18,7 +18,7 @@ def prepare_arg(arg):
 
     return _arg
 
-def prepare(fn):
+def _prepare(fn):
     """Inspects a function and return a function spec dict
 
     Output:
@@ -37,7 +37,7 @@ def prepare(fn):
     sig = signature(fn)
     _args = {}
     for k, v in sig.parameters.items():
-        _args[k] = prepare_arg(v)
+        _args[k] = _prepare_arg(v)
 
     spec = {
         'name': fn.__name__,
@@ -59,7 +59,7 @@ def tranquilize(method=None):
         method = method.lower()
 
     def _dart(f):
-        f._spec = prepare(f)
+        f._spec = _prepare(f)
         f._method = method
         return f
 

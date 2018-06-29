@@ -1,7 +1,7 @@
 {% set setup_py = load_setup_py_data() %}
 
 package:
-    name: 'tranquil'
+    name: 'tranquilizer'
     version: {{ setup_py.get('version') }}
 
 source:
@@ -10,7 +10,7 @@ source:
 build:
     script: python setup.py install --single-version-externally-managed --record=record.txt
     entry_points:
-        - tranquil = tranquil.__main__:main
+        - tranquilizer = tranquilizer.__main__:main
 
 requirements:
     run:
@@ -28,3 +28,4 @@ about:
     license: {{ setup_py.get('license') }}
     license_file: LICENSE
     summary: {{ setup_py.get('description') }}
+

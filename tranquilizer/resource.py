@@ -5,7 +5,7 @@ from collections import Mapping, Sequence
 
 from .types import is_container
 
-def make_parser(func_spec, location='args'):
+def _make_parser(func_spec, location='args'):
     '''Create RequestParser from anotated function arguments
 
     arguments without default values are flagged as required'''
@@ -27,7 +27,7 @@ def make_parser(func_spec, location='args'):
 
 def make_resource(func, api):
     location = 'form' if func._method == 'post' else 'args'
-    parser = make_parser(func._spec, location=location)
+    parser = _make_parser(func._spec, location=location)
 
     @api.expect(parser, validate=True)
     def _method(self):
@@ -36,7 +36,7 @@ def make_resource(func, api):
         output = func(**request)
         return jsonify(output)
 
-    Tranquil = type('Tranquil', (Resource,), {func._method:_method})
+    Tranquilized = type('Tranquilized', (Resource,), {func._method:_method})
 
-    return Tranquil
+    return Tranquilized
 
