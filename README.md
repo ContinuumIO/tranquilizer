@@ -1,6 +1,6 @@
 # Tranquilizer
 
-*Put your functions to REST*
+Deploy a REST API with one line by decorating your functions.
 
 ## Quick start
 
