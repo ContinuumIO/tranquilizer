@@ -16,11 +16,17 @@ def _make_parser(func_spec, location='args'):
         _default = spec.get('default', None)
         action = 'append' if is_container(_type) else 'store'
 
+        try:
+            description = getattr(_type, '__description__')
+        except AttributeError:
+            description = None
+
         parser.add_argument(argument, type=_type,
                             default=_default,
                             required=(not _default),
                             location=location,
-                            action=action)
+                            action=action,
+                            help=description)
 
     return parser
 

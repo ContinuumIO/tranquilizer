@@ -46,6 +46,7 @@ class ParsedDateTime(datetime):
     recieves a string: use dateutil to parse
     receives an integer: use datetime.datetime'''
     __schema__ = {'type':'string', 'format':'date-time'}
+    __description__ = 'dateutil.parser.parse compatible datetime string'
 
     def __new__(cls, *args):
         if isinstance(args[0], str) and len(args)==1:
