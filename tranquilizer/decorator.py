@@ -48,15 +48,14 @@ def _prepare(fn):
     return spec
 
 
-def tranquilize(method=None):
+def tranquilize(method='get'):
     """Decorator function that gets a function wraps it in order to
     append a function spec (see prepare function) and autocast args/kws
     to match types.
     """
-    if not method:
-        method = "get"
-    else:
-        method = method.lower()
+
+    #just to be safe
+    method = method.lower()
 
     def _dart(f):
         f._spec = _prepare(f)

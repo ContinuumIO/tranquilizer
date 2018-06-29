@@ -31,10 +31,11 @@ def make_resource(func, api):
 
     @api.expect(parser, validate=True)
     def _method(self):
-        '''{}'''.format(func._spec['docstring'])
         request = parser.parse_args()
         output = func(**request)
         return jsonify(output)
+
+    _method.__doc__ = func.__doc__
 
     Tranquilized = type('Tranquilized', (Resource,), {func._method:_method})
 

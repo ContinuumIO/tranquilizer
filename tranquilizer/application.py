@@ -35,13 +35,13 @@ def cli():
     return parser
 
 
-def make_app(functions, prefix='/'):
-    api = Api(title='tranquilized api')
+def make_app(functions, name, prefix='/'):
+    api = Api(title=name)
     app = Flask(__name__)
     app.config['PREFERRED_URL_SCHEME'] = 'https'
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
-    ns = Namespace(prefix, 'Tranquilized API')
+    ns = Namespace(prefix, description='Tranquilized API')
 
     for f in functions:
         resource = make_resource(f, ns)
