@@ -2,10 +2,8 @@ from collections import Mapping, Sequence
 from dateutil.parser import parse
 from datetime import datetime
 from typing import List, Generic, TypeVar
-import base64
-import numpy as np
-import io
 from PIL import Image as pil_image
+import io
 
 T = TypeVar('T')
 S = TypeVar('S')
@@ -26,26 +24,6 @@ class Image(object):
         in_memory_file = io.BytesIO()
         file.save(in_memory_file)
         return pil_image.open(in_memory_file)
-
-
-class Bytes(bytes, Generic[T]):
-    '''Base Class for byte string with custom decoding'''
-    def __new__(cls, utf8_string):
-        decoder = cls.__args__[0]
-        # the kernelgateway always sends UFT8 strings
-        return decoder(utf8_string.encode())
-
-
-Base64Bytes = Bytes[base64.decodebytes]
-
-
-class NDArray(Base64Bytes, Generic[T]):
-    '''NumPy arrays as base64 byte string'''
-    def __new__(cls, utf8_string):
-        dtype = cls.__args__[0]
-
-        _bytes = super().__new__(Base64Bytes, utf8_string)
-        return np.fromstring(_bytes, dtype=dtype)
 
 
 class ParsedDateTime(datetime):
