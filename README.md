@@ -8,7 +8,7 @@ In a script file called `cheese_shop.py` the decorated function
 will be served as an end point called `cheese` with the GET method. The
 function must return a JSON serializable object. Dictionaries are preferable.
 
-See the [complete description of `@tranquilize()`](#complete-description) below.
+See the [complete description of `@tranquilize()`](#tranquilize-decorator) below.
 
 ```python
 from tranquilizer import tranquilize
@@ -57,7 +57,7 @@ in your web browser at [http://localhost:8086](http://localhost:8086).
 
 ![](img/swagger.png)
 
-## Complete Description
+## Tranquilize Decorator
 
 The `@tranqulizer` decorator will assign the GET method by default. POST is also supported with `method='post'`.
 Other methods are under consideration.
@@ -66,7 +66,22 @@ By default a *tranquilized* function will receive all inputs as strings. This be
 type function to transform the string to the requested data type. This avoids having to perform the conversion in your
 *tranquilized* function.
 
-Tranquilizer provides several new types. The example below uses `int`, `ParsedDateTime`, and `TypedList`. `ParsedDataTime`
+In addition to [*builtin* types](https://docs.python.org/3/library/stdtypes.html) Tranquilizer provides several new types. Custom types can be defined in your code.
+
+|Type|Description|
+|----|-----------|
+|`ParsedDateTime`| Converts string to `datetime.datetime` with `dateutil.parser.parse`.|
+|`Image`| Converts binary data to `PIL.Image`. This supports sending files with cURL using `-F`.|
+|`NDArray`| *NumPy arrays coming soon.*|
+|`TypedList[<type>]`| Converts *repeated* arguments to a list of type `\<type\>`.|
+
+`TypedList` arguments are constructed using the `action='append'` argument described in
+the [Flask RESTPlus documentation](http://flask-restplus.readthedocs.io/en/stable/parsing.html#multiple-values-lists)`.
+Any valid type can be used in `TypedList[]`.
+
+### Type hints example
+
+The example below uses `int`, `ParsedDateTime`, and `TypedList`. `ParsedDataTime`
 has been built with `datetutil` and will convert any compatible datetime string to a `datetime.datetime` object. `TypedList`
 supports specialization with `[]` and will transform all *repeated* arguments passed to the REST API into a list and convert
 the type of each element.
@@ -112,3 +127,8 @@ In [5]:
 Types defined by tranquilizer will include the description of how the data will be converted.
 
 ![](img/types.png)
+
+
+### Custom types
+
+Custom type classes can be built...
