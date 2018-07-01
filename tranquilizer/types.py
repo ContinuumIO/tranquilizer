@@ -4,6 +4,8 @@ from datetime import datetime
 from typing import List, Generic, TypeVar
 import base64
 import numpy as np
+import io
+from PIL import Image as pil_image
 
 T = TypeVar('T')
 S = TypeVar('S')
@@ -16,6 +18,14 @@ def is_container(type_):
     basic_scalars = issubclass(type_, str) or issubclass(type_, bytes)
 
     return  (not basic_scalars) and container
+
+
+class Image(object):
+    __location__ = 'files'
+    def __new__(cls, file):
+        in_memory_file = io.BytesIO()
+        file.save(in_memory_file)
+        return pil_image.open(in_memory_file)
 
 
 class Bytes(bytes, Generic[T]):
