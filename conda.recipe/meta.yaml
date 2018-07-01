@@ -18,8 +18,8 @@ requirements:
         - flask
         - werkzeug
         - python-dateutil
-        - numpy
         - flask-restplus
+        - pillow
     build:
         - python
         - setuptools

@@ -21,6 +21,15 @@ def _make_parser(func_spec, location='args'):
         except AttributeError:
             description = None
 
+        # Files (e.g., images) arrive in a different
+        # Flask.Requst location. The last value in
+        # the tuple takes precedence.
+        try:
+            _loc = getattr(_type, '__location__')
+            _location = (location, _loc)
+        except AttributeError:
+            _location = location
+
         if is_container(_type):
             action = 'append'
             type_name = _type.__args__[0].__name__
@@ -30,7 +39,7 @@ def _make_parser(func_spec, location='args'):
         parser.add_argument(argument, type=_type,
                             default=_default,
                             required=(not _default),
-                            location=location,
+                            location=_location,
                             action=action,
                             help=description)
 
