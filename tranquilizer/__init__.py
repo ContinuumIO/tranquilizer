@@ -1,6 +1,5 @@
 '''Tranquilizer'''
 from .decorator import tranquilize
-from .types import ParsedDateTime, TypedList, Image
+from . import types
 
-__version__ = '0.0.2'
-
+__version__ = '0.0.3'

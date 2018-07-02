@@ -2,8 +2,14 @@ from collections import Mapping, Sequence
 from dateutil.parser import parse
 from datetime import datetime
 from typing import List, Generic, TypeVar
+from werkzeug.datastructures import FileStorage
 from PIL import Image as pil_image
+import numpy as np
 import io
+
+__all__ = ['File', 'TextFile', 'Image', 'NDArray',
+           'ParsedDateTime', 'TypedList'
+]
 
 T = TypeVar('T')
 S = TypeVar('S')
@@ -18,12 +24,41 @@ def is_container(type_):
     return  (not basic_scalars) and container
 
 
-class Image(object):
+class File(FileStorage):
+    '''Thin wrapper for werkzeug.datastructures.FileStorage'''
     __location__ = 'files'
+    __schema__ = {'type':'file', 'format':'binary file'}
+    __description__ = 'Read file as binary.'
     def __new__(cls, file):
-        in_memory_file = io.BytesIO()
-        file.save(in_memory_file)
-        return pil_image.open(in_memory_file)
+        return file
+
+
+class TextFile(File):
+    '''Returns io.StringIO object'''
+    __schema__ = {'type':'file', 'format':'text file'}
+    __description__ = 'Read file as text.'
+    def __new__(cls, *args, **kwargs):
+        f = super().__new__(cls, *args, **kwargs)
+        t = io.StringIO(f.read().decode())
+        return t
+
+
+class Image(File):
+    '''Returns PIL.Image object'''
+    __schema__ = {'type':'file', 'format':'image'}
+    __description__ = 'Read image file as PIL.Image.'
+    def __new__(cls, *args, **kwargs):
+        f = super().__new__(cls, *args, **kwargs)
+        return pil_image.open(f)
+
+
+class NDArray(File):
+    '''Returns a NumPy array using np.load()'''
+    __schema__ = {'type':'file', 'format':'NumPy array'}
+    __description__ = 'NumPy array file.'
+    def __new__(cls, *args, **kwargs):
+        f = super().__new__(cls, *args, **kwargs)
+        return np.load(f)
 
 
 class ParsedDateTime(datetime):
@@ -56,4 +91,3 @@ class TypedList(List, Generic[T]):
     def __new__(cls, *args, **kwds):
         _type = cls.__args__[0]
         return _type(*args)
-

@@ -13,7 +13,8 @@ def main():
     fn = basename(args.filename)
     app = make_app(functions, name=fn, prefix=args.anaconda_project_url_prefix)
 
-    app.run(host=args.anaconda_project_address, port=args.anaconda_project_port)
+    app.run(host=args.anaconda_project_address, port=args.anaconda_project_port,
+            debug=args.debug)
 
 if __name__ == '__main__':
     main()

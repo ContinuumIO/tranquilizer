@@ -9,6 +9,8 @@ def cli():
     parser = ArgumentParser(prog="tranquilizer",
                             description="Put your functions to REST")
     parser.add_argument('filename', help='Script file with tranquilized functions')
+    parser.add_argument('--debug', action='store_true', default=False,
+                        help='Run API with debug output.')
 
     # arg parser for the standard anaconda-project options
     parser.add_argument('--anaconda-project-host', action='append', default=[],
