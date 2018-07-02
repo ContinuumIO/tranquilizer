@@ -1,4 +1,5 @@
-from tranquilizer import tranquilize, ParsedDateTime, TypedList
+from tranquilizer import tranquilize
+from tranquilizer.types import ParsedDateTime, TypedList
 
 @tranquilize(method='post')
 def convert(string: str, date: ParsedDateTime, items: TypedList[float], factor: int = 10):

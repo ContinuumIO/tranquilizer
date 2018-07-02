@@ -2,7 +2,8 @@
 # curl -X POST -F "image=@<image-file>" http://localhost:8086/describe_image
 # requests.post('http://localhost:8086/describe_image', files={'image':open('<image-file>', 'rb')})
 
-from tranquilizer import tranquilize, Image
+from tranquilizer import tranquilize
+from tranquilizer.types import Image
 import numpy as np
 
 @tranquilize(method='post')
