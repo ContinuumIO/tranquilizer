@@ -72,7 +72,7 @@ In addition to [*builtin* types](https://docs.python.org/3/library/stdtypes.html
 |Type|Description|
 |----|-----------|
 |`ParsedDateTime`| Converts string to `datetime.datetime` with `dateutil.parser.parse`.|
-|`TypedList[<type>]`| Converts *repeated* arguments to a list of type `\<type\>`.|
+|`TypedList[<type>]`| Converts *repeated* arguments to a list of type `<type>`.|
 
 `TypedList` arguments are constructed using the `action='append'` argument described in
 the [Flask RESTPlus documentation](http://flask-restplus.readthedocs.io/en/stable/parsing.html#multiple-values-lists)`.
