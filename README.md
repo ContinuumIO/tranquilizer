@@ -59,7 +59,7 @@ in your web browser at [http://localhost:8086](http://localhost:8086).
 
 ## Tranquilize Decorator
 
-The `@tranqulizer` decorator will assign the GET method by default. POST is also supported with `method='post'`.
+The `@tranqulize` decorator will assign the GET method by default. POST is also supported with `method='post'`.
 Other methods are under consideration.
 
 By default a *tranquilized* function will receive all inputs as strings. This behavior can be modified by using [type hints](https://docs.python.org/3/library/typing.html). When data is received by the Flask server it will use the provided
