@@ -72,10 +72,10 @@ In addition to [*builtin* types](https://docs.python.org/3/library/stdtypes.html
 |Type|Description|
 |----|-----------|
 |`ParsedDateTime`| Converts string to `datetime.datetime` with `dateutil.parser.parse`.|
-|`TypedList[<type>]`| Converts *repeated* arguments to a list of type `<type>`.|
+|`TypedList[<type>]`| Converts *repeated* arguments to a list; each value is converted to `<type>`.|
 
 `TypedList` arguments are constructed using the `action='append'` argument described in
-the [Flask RESTPlus documentation](http://flask-restplus.readthedocs.io/en/stable/parsing.html#multiple-values-lists)`.
+the [Flask RESTPlus documentation](http://flask-restplus.readthedocs.io/en/stable/parsing.html#multiple-values-lists).
 Any valid type can be used in `TypedList[]`.
 
 The following types are subclasses of `tranquilizer.types.File`, which returns a [werkzeug `FileStorage`](http://werkzeug.pocoo.org/docs/0.14/datastructures/#werkzeug.datastructures.FileStorage).
