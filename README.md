@@ -59,7 +59,7 @@ in your web browser at [http://localhost:8086](http://localhost:8086).
 
 ## Tranquilize Decorator
 
-The `@tranqulizer` decorator will assign the GET method by default. POST is also supported with `method='post'`.
+The `@tranqulize` decorator will assign the GET method by default. POST is also supported with `method='post'`.
 Other methods are under consideration.
 
 By default a *tranquilized* function will receive all inputs as strings. This behavior can be modified by using [type hints](https://docs.python.org/3/library/typing.html). When data is received by the Flask server it will use the provided
@@ -72,10 +72,10 @@ In addition to [*builtin* types](https://docs.python.org/3/library/stdtypes.html
 |Type|Description|
 |----|-----------|
 |`ParsedDateTime`| Converts string to `datetime.datetime` with `dateutil.parser.parse`.|
-|`TypedList[<type>]`| Converts *repeated* arguments to a list of type `\<type\>`.|
+|`TypedList[<type>]`| Converts *repeated* arguments to a list; each value is converted to `<type>`.|
 
 `TypedList` arguments are constructed using the `action='append'` argument described in
-the [Flask RESTPlus documentation](http://flask-restplus.readthedocs.io/en/stable/parsing.html#multiple-values-lists)`.
+the [Flask RESTPlus documentation](http://flask-restplus.readthedocs.io/en/stable/parsing.html#multiple-values-lists).
 Any valid type can be used in `TypedList[]`.
 
 The following types are subclasses of `tranquilizer.types.File`, which returns a [werkzeug `FileStorage`](http://werkzeug.pocoo.org/docs/0.14/datastructures/#werkzeug.datastructures.FileStorage).
