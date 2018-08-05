@@ -7,7 +7,7 @@ setup(
     author_email='adefusco@anaconda.com',
     description='Put your functions to REST',
     url='https://github.com/ContinuumIO/tranquilizer',
-    license='MIT',
+    license='BSD 3-clause',
     version=find_version('tranquilizer', '__init__.py'),
     packages=find_packages(),
     entry_points={
