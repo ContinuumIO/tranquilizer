@@ -1,6 +1,9 @@
 from version import find_version
 from setuptools import setup, find_packages
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name='tranquilizer',
     author='Albert DeFusco',
@@ -19,7 +22,9 @@ setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: BSD License",
         "Framework :: Flask"
-    )
+    ),
+    description='Deploy a REST API with one line by decorating your functions.',
+    long_description=long_description
 
 )
 
