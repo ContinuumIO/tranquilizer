@@ -23,7 +23,6 @@ setup(
         "License :: OSI Approved :: BSD License",
         "Framework :: Flask"
     ),
-    description='Deploy a REST API with one line by decorating your functions.',
     long_description=long_description
 
 )
