@@ -11,12 +11,15 @@ setup(
     version=find_version('tranquilizer', '__init__.py'),
     packages=find_packages(),
     entry_points={
-        #'anaconda_project.plugins.command_run': [
-        #    'tranquilizer_api = tranquililizer.__main__:init_command',
-        #],
         'console_scripts': [
             'tranquilizer = tranquilizer.__main__:main'
         ]
-    }
+    },
+    classifiers=(
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: BSD License",
+        "Framework :: Flask"
+    )
+
 )
 
