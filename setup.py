@@ -4,9 +4,9 @@ from setuptools import setup, find_packages
 setup(
     name='tranquilizer',
     author='Albert DeFusco',
-    author_email='adefusco@anaconda.com',
+    author_email='albert.defusco@me.com',
     description='Put your functions to REST',
-    url='https://github.com/ContinuumIO/tranquilizer',
+    url='https://github.com/AlbertDeFusco/tranquilizer',
     license='BSD 3-clause',
     version=find_version('tranquilizer', '__init__.py'),
     packages=find_packages(),
