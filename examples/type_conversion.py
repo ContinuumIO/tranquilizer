@@ -3,7 +3,9 @@ from tranquilizer.types import ParsedDateTime, TypedList
 
 @tranquilize(method='get')
 def dates(date: ParsedDateTime):
-    '''Extract components of a datetime string.'''
+    '''Extract components of a datetime string.
+    
+    :param date: parsible datetime'''
 
     response = {
             'month'  : date.month,
@@ -16,9 +18,11 @@ def dates(date: ParsedDateTime):
 
 @tranquilize(method='post')
 def vector_multiply(items: TypedList[float], factor: int = 10):
-    '''Multiply a list of floats by a factor'''
+    '''Multiply a list of floats by a factor
 
-    raise ValueError('nope', code=403)
+    :param items: list of floating point numbers
+    :param factor: multiplicative factor (default 10)'''
+
     new_items = [i * factor for i in items]
     response = {
             'items': new_items
