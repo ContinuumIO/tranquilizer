@@ -24,6 +24,9 @@ def _prepare_arg(arg):
 def _prepare_arg_docs(docstring):
     args = re.findall(PARAM_REGEX, docstring)
     remainder = re.sub(PARAM_REGEX, '', docstring)
+
+    if not args:
+        return {}, remainder
     
     docs = {}
     for arg in args:
@@ -63,8 +66,13 @@ def _prepare(fn):
     for k, v in sig.parameters.items():
         _args[k] = _prepare_arg(v)
 
-    param_docs, docstring = _prepare_arg_docs(fn.__doc__)
-    error_docs, docstring = _prepare_error_docs(docstring)
+    if fn.__doc__:
+        param_docs, docstring = _prepare_arg_docs(fn.__doc__)
+        error_docs, docstring = _prepare_error_docs(docstring)
+    else:
+        param_docs = {}
+        error_docs = {}
+        docstring = ''
 
     spec = {
         'name': fn.__name__,
