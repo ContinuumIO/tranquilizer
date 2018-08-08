@@ -45,7 +45,7 @@ def make_app(functions, name, prefix='/'):
 
     @api.errorhandler
     def _default_error(error):
-        return {'message':str(error)}, 500
+        return {'message':repr(error)}, 500
 
     ns = Namespace(prefix, description='Tranquilized API')
 
