@@ -3,7 +3,7 @@ from flask import jsonify, request
 from flask_restplus import Resource, reqparse
 from collections import Mapping, Sequence
 
-from .types import is_container
+from .types import is_container, type_mapper
 
 def _make_parser(func_spec, location='args'):
     '''Create RequestParser from anotated function arguments
@@ -29,6 +29,8 @@ def _make_parser(func_spec, location='args'):
             _location = (location, _loc)
         except AttributeError:
             _location = location
+
+        _type = type_mapper(_type)
 
         if is_container(_type):
             action = 'append'

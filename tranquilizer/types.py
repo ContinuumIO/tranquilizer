@@ -1,7 +1,7 @@
 from collections import Mapping, Sequence
 from dateutil.parser import parse
-from datetime import datetime
-from typing import List, Generic, TypeVar
+from datetime import datetime, date
+from typing import List, Generic, TypeVar, TextIO, BinaryIO
 from werkzeug.datastructures import FileStorage
 from PIL import Image as pil_image
 import numpy as np
@@ -91,3 +91,21 @@ class TypedList(List, Generic[T]):
     def __new__(cls, *args, **kwds):
         _type = cls.__args__[0]
         return _type(*args)
+
+
+def type_mapper(type_):
+    if issubclass(type_, List):
+        item_type = type_.__args__[0]
+        return TypedList[item_type]
+    elif issubclass(type_, TextIO):
+        return TextFile
+    elif issubclass(type_, BinaryIO):
+        return File
+    elif issubclass(type_, pil_image):
+        return Image
+    elif issubclass(type_, np.ndarray):
+        return NDArray
+    elif issubclass(type_, [datetime, date]):
+        return ParsedDateTime
+    else:
+        return type_
