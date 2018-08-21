@@ -16,6 +16,8 @@ def _make_parser(func_spec, location='args'):
         _default = spec.get('default', None)
         action = 'store'
 
+        _type = type_mapper(_type)
+
         try:
             description = getattr(_type, '__description__')
         except AttributeError:
@@ -30,7 +32,6 @@ def _make_parser(func_spec, location='args'):
         except AttributeError:
             _location = location
 
-        _type = type_mapper(_type)
 
         if is_container(_type):
             action = 'append'
