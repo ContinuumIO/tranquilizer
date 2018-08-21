@@ -1,9 +1,10 @@
 from tranquilizer import tranquilize
-from tranquilizer.types import ParsedDateTime, TypedList
+from typing import List
+from datetime import date
 
 @tranquilize(method='get')
-def dates(date: ParsedDateTime):
-    '''Extract components of a datetime string.'''
+def dates(date: date):
+    '''Extract components of a date string.'''
 
     response = {
             'month'  : date.month,
@@ -15,10 +16,9 @@ def dates(date: ParsedDateTime):
     return response
 
 @tranquilize(method='post')
-def vector_multiply(items: TypedList[float], factor: int = 10):
+def vector_multiply(items: List[float], factor: int = 10):
     '''Multiply a list of floats by a factor'''
 
-    raise ValueError('nope', code=403)
     new_items = [i * factor for i in items]
     response = {
             'items': new_items

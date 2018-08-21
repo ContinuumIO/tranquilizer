@@ -9,13 +9,13 @@
 # requests.post('http://localhost:8086/array_file', files={'arr':f.getvalue()})
 
 from tranquilizer import tranquilize
-from tranquilizer.types import TextFile, NDArray
+from typing import TextIO
 import numpy as np
 
 @tranquilize('post')
-def text_file(file: TextFile):
+def text_file(file: TextIO):
     return {'response':file.read()}
 
 @tranquilize('post')
-def array_file(arr: NDArray):
+def array_file(arr: np.ndarray):
     return {'response':(arr.shape, str(arr.dtype))}
