@@ -43,6 +43,10 @@ def make_app(functions, name, prefix='/'):
     app.config['PREFERRED_URL_SCHEME'] = 'https'
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
+    @api.errorhandler
+    def _default_error(error):
+        return {'message':repr(error)}, 500
+
     ns = Namespace(prefix, description='Tranquilized API')
 
     for f in functions:

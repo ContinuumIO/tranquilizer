@@ -4,7 +4,9 @@ from datetime import date
 
 @tranquilize(method='get')
 def dates(date: date):
-    '''Extract components of a date string.'''
+    '''Extract components of a datetime string.
+    
+    :param date: parsible datetime'''
 
     response = {
             'month'  : date.month,
@@ -17,7 +19,10 @@ def dates(date: date):
 
 @tranquilize(method='post')
 def vector_multiply(items: List[float], factor: int = 10):
-    '''Multiply a list of floats by a factor'''
+    '''Multiply a list of floats by a factor
+
+    :param items: list of floating point numbers
+    :param factor: multiplicative factor (default 10)'''
 
     new_items = [i * factor for i in items]
     response = {
