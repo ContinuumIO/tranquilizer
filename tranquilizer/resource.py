@@ -3,7 +3,7 @@ from flask import jsonify, request
 from flask_restplus import Resource, reqparse
 from collections import Mapping, Sequence
 
-from .types import is_container
+from .types import is_container, type_mapper
 
 
 def _make_parser(func_spec, location='args'):
@@ -17,16 +17,24 @@ def _make_parser(func_spec, location='args'):
         _default = spec.get('default', None)
         action = 'store'
 
+        _type = type_mapper(_type)
+
+#       try:
+#           description = getattr(_type, '__description__')
+#       except AttributeError:
+#           description = None
+
         doc = func_spec['param_docs'].get(argument, None)
 
         # Files (e.g., images) arrive in a different
-        # Flask.Requst location. The last value in
+        # Flask.Request location. The last value in
         # the tuple takes precedence.
         try:
             _loc = getattr(_type, '__location__')
             _location = (location, _loc)
         except AttributeError:
             _location = location
+
 
         if is_container(_type):
             action = 'append'

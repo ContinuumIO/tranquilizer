@@ -5,7 +5,7 @@ def test(number: int):
     '''testing types and errors
 
     Let's see if we can find a reasonable way to express
-    execptions and return codes.
+    exceptions and return codes.
 
     :raise ValueError: when number less than zero
     :raises TypeError: just because

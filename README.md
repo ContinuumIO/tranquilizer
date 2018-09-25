@@ -67,27 +67,35 @@ type function to transform the string to the requested data type. This avoids ha
 
 ## Data Types
 
-In addition to [*builtin* types](https://docs.python.org/3/library/stdtypes.html) Tranquilizer provides several new types in the `tranquilizer.types` module. 
+In addition to [*builtin* types](https://docs.python.org/3/library/stdtypes.html) Tranquilizer 
+provides specialized support for Lists, date/datetime, and files. 
+
 
 |Type|Description|
 |----|-----------|
-|`ParsedDateTime`| Converts string to `datetime.datetime` with `dateutil.parser.parse`.|
-|`TypedList[<type>]`| Converts *repeated* arguments to a list; each value is converted to `<type>`.|
+|`datetime.date` or `datetime.datetime`| Converts string with `dateutil.parser.parse` and returns specified type.|
+|`list`| Converts *repeated* arguments to a list of strings.|
+|`typing.List[<type>]`| Converts *repeated* arguments to a list; each value is converted to `<type>`.|
 
-`TypedList` arguments are constructed using the `action='append'` argument described in
+`List` arguments are constructed using the `action='append'` argument described in
 the [Flask RESTPlus documentation](http://flask-restplus.readthedocs.io/en/stable/parsing.html#multiple-values-lists).
-Any valid type can be used in `TypedList[]`.
+Any valid type can be used in `List[]`.
 
-The following types are subclasses of `tranquilizer.types.File`, which returns a [werkzeug `FileStorage`](http://werkzeug.pocoo.org/docs/0.14/datastructures/#werkzeug.datastructures.FileStorage).
+The following file-like types are handled by [werkzeug `FileStorage`](http://werkzeug.pocoo.org/docs/0.14/datastructures/#werkzeug.datastructures.FileStorage).
 `FileStorage` is a file-like object that supports methods like `.read()` and `.readlines()`.
 These types support sending files with cURL using `-F`.
 
 |Type|Description|
 |----|-----------|
-|`File`| File-like object to read binary data.|
-|`TextFile`| Converts `File` type to `io.StringIO()`.|
-|`Image`| Converts `File` type to `PIL.Image`.|
-|`NDArray`| Converts `File` type to NumPy array using `np.load()`. |
+|`typing.BinaryIO`| File-like object to read binary data.|
+|`typing.TextIO`| Converts `FileStorage` type to `io.StringIO()`.|
+
+Further, specific support for Image and NumPy files are provided. The binary contents of the file are automatically converted.
+
+|Type|Description|
+|----|-----------|
+|`PIL.Image.Image`| Converts `FileStorage` type to PIL Image.|
+|`numpy.ndarray`| Converts `FileStorage` type to NumPy array using `np.load()`. |
 
 ### Custom types
 
@@ -95,8 +103,8 @@ Custom type classes can be built...
 
 ## Type hints example
 
-The example below uses `int`, `ParsedDateTime`, and `TypedList`. `ParsedDataTime`
-has been built with `datetutil` and will convert any compatible datetime string to a `datetime.datetime` object. `TypedList`
+The example below uses `int`, `datetime.datetime`, and `typing.List`. `datetime.datetime` support
+has been built with `datetutil` and will convert any compatible datetime string to a `datetime.datetime` object. `typing.List`
 supports specialization with `[]` and will transform all *repeated* arguments passed to the REST API into a list and convert
 the type of each element.
 
@@ -104,10 +112,11 @@ Finally, tranquilizer supports default arguments.
 
 ```python
 from tranquilizer import tranquilize
-from tranquilizer.types import ParsedDateTime, TypedList
+from datetime import date
+from typing import List
 
 @tranquilize(method='post')
-def convert(string: str, date: ParsedDateTime, items: TypedList[float], factor: int = 10):
+def convert(string: str, date: date, items: List[float], factor: int = 10):
     '''Let's convert strings to something useful'''
 
     new_items = [i * factor for i in items]
@@ -138,8 +147,3 @@ Out[4]:
 
 In [5]:
 ```
-
-Types defined by tranquilizer will include the description of how the data will be converted.
-
-![](img/types.png)
-

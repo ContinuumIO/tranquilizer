@@ -1,15 +1,11 @@
 from collections import Mapping, Sequence
 from dateutil.parser import parse
-from datetime import datetime
-from typing import List, Generic, TypeVar
+from datetime import datetime, date
+from typing import List, Generic, TypeVar, TextIO, BinaryIO
 from werkzeug.datastructures import FileStorage
 from PIL import Image as pil_image
 import numpy as np
 import io
-
-__all__ = ['File', 'TextFile', 'Image', 'NDArray',
-           'ParsedDateTime', 'TypedList'
-]
 
 T = TypeVar('T')
 S = TypeVar('S')
@@ -61,21 +57,27 @@ class NDArray(File):
         return np.load(f)
 
 
-class ParsedDateTime(datetime):
+class ParsedDateTime(Generic[T]):
     '''A flexible dateteime.datetime class
 
-    If the constructor
-
     recieves a string: use dateutil to parse
-    receives an integer: use datetime.datetime'''
+    
+    The type specifier determines the returned type.
+    ParsedDateTime[datetime.date]
+    ParsedDateTime[datetime.datetime]
+    ParsedDateTime[pd.Timestamp]
+    '''
     __schema__ = {'type':'string', 'format':'date-time'}
     __description__ = 'dateutil.parser.parse compatible datetime string'
 
     def __new__(cls, *args):
-        if isinstance(args[0], str) and len(args)==1:
-            return parse(args[0])
+        parsed =  parse(args[0])
+        _type = cls.__args__[0]
+        if issubclass(_type, date):
+            return parsed.date()
         else:
-            return super().__new__(datetime, *args)
+            return _type(parsed)
+        return parsed
 
 
 class TypedList(List, Generic[T]):
@@ -91,3 +93,30 @@ class TypedList(List, Generic[T]):
     def __new__(cls, *args, **kwds):
         _type = cls.__args__[0]
         return _type(*args)
+
+
+def type_mapper(type_):
+    '''Map common type hints to custom classes
+    
+    If no conversion is necessary the input type
+    is returned.
+    '''
+
+    if issubclass(type_, List):
+        try:
+            item_type = type_.__args__[0]
+        except:
+            item_type = str
+        return TypedList[item_type]
+    elif issubclass(type_, TextIO):
+        return TextFile
+    elif issubclass(type_, BinaryIO):
+        return File
+    elif issubclass(type_, pil_image.Image):
+        return Image
+    elif issubclass(type_, np.ndarray):
+        return NDArray
+    elif issubclass(type_, (datetime, date)):
+        return ParsedDateTime[type_]
+    else:
+        return type_
