@@ -18,11 +18,11 @@ setup(
             'tranquilizer = tranquilizer.__main__:main'
         ]
     },
-    classifiers=(
+    classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: BSD License",
         "Framework :: Flask"
-    ),
+    ],
     long_description=long_description
 
 )
