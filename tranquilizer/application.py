@@ -4,6 +4,7 @@ from flask_restplus import Api, Namespace
 from argparse import ArgumentParser
 
 from .resource import make_resource
+from .__init__ import __version__
 
 def cli():
     parser = ArgumentParser(prog="tranquilizer",
@@ -11,6 +12,8 @@ def cli():
     parser.add_argument('filename', help='Script file with tranquilized functions')
     parser.add_argument('--debug', action='store_true', default=False,
                         help='Run API with debug output.')
+    parser.add_argument('--version', action='version',
+                    version='%(prog)s {version}'.format(version=__version__))
 
     # arg parser for the standard anaconda-project options
     parser.add_argument('--anaconda-project-host', action='append', default=[],
