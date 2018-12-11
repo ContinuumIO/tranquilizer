@@ -2,6 +2,14 @@
 
 Deploy a REST API with one line by decorating your functions.
 
+## Install
+
+The package is available for all Mac, Linux, and Windows on my conda channel. Python 2 is not supported.
+
+```
+> conda install -c defusco tranquilizer
+```
+
 ## Quick start
 
 In a script file called `cheese_shop.py` the decorated function
