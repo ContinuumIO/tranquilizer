@@ -10,6 +10,7 @@ def cli():
     parser = ArgumentParser(prog="tranquilizer",
                             description="Put your functions to REST")
     parser.add_argument('filename', help='Script file with tranquilized functions')
+    parser.add_argument('--name', help='Name of the REST API to use in Swagger')
     parser.add_argument('--debug', action='store_true', default=False,
                         help='Run API with debug output.')
     parser.add_argument('--version', action='version',
