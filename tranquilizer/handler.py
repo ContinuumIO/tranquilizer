@@ -2,6 +2,7 @@
 import ast
 from runpy import run_path
 from abc import ABC, abstractmethod
+from unittest.mock import MagicMock
 from os.path import dirname, join, basename
 import os
 
@@ -57,6 +58,6 @@ class NotebookHandler(BaseHandler):
             f.write(source)
 
         self.nodes = ast.parse(source, script_file)
-        self.module = run_path(script_file)
+        self.module = run_path(script_file, init_globals={'get_ipython':MagicMock()})
 
         os.remove(script_file)
