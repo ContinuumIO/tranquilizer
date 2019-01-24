@@ -1,10 +1,9 @@
 '''execute the script file'''
 import ast
 from runpy import run_path
-from abc import ABC, abstractmethod
 from unittest.mock import MagicMock
 from os.path import dirname, join, basename
-import os
+import tempfile
 
 def _is_tranquilized(decorator):
     return hasattr(decorator, 'id') and (decorator.id in ('tranquilize',))
@@ -12,6 +11,7 @@ def _is_tranquilized(decorator):
 def _is_decorated(item):
     if isinstance(item, ast.FunctionDef):
         return any([_is_tranquilized(d.func) for d in item.decorator_list])
+
 
 class BaseHandler(object):
 
@@ -50,14 +50,10 @@ class NotebookHandler(BaseHandler):
         exporter = ScriptExporter()
         source, _ = exporter.from_filename(self.fn)
 
-        #maybe not the best idea, but works
-        directory = dirname(self.fn)
-        script_name = basename(self.fn) + '.py'
-        script_file = join(directory, script_name)
-        with open(script_file, 'w') as f:
-            f.write(source)
+        self.nodes = ast.parse(source, self.fn)
 
-        self.nodes = ast.parse(source, script_file)
-        self.module = run_path(script_file, init_globals={'get_ipython':MagicMock()})
+        with tempfile.NamedTemporaryFile(mode='w', dir=dirname(self.fn)) as tmp:
+            tmp.write(source)
+            tmp.flush()
+            self.module = run_path(tmp.name, init_globals={'get_ipython':MagicMock()})
 
-        os.remove(script_file)
