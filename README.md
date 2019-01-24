@@ -76,8 +76,11 @@ type function to transform the string to the requested data type. This avoids ha
 ## Supported source formats
 
 Tranquilizer can serve functions written in Python source (`.py`) files or Jupyter Notebooks (`.ipynb`).
+
+When working interactively in Jupyter Notebooks the decorated functions will continue to operate as normal.
 Note that all calls to [Jupyter Magic](https://ipython.readthedocs.io/en/stable/interactive/magics.html)
-and Shell (`!`) commands will be ignored. Only those lines will be ignored, the rest of the cell will continue to run.
+and Shell (`!`) commands will be ignored when the REST API is served.
+Only those lines will be ignored, the rest of the cell will continue to run.
 
 ## Data Types
 
