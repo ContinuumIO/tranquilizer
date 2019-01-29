@@ -73,6 +73,15 @@ Other methods are under consideration.
 By default a *tranquilized* function will receive all inputs as strings. This behavior can be modified by using [type hints](https://docs.python.org/3/library/typing.html). When data is received by the Flask server it will use the provided
 type function to transform the string to the requested data type. This avoids having to perform the conversion in your *tranquilized* function.
 
+## Supported source formats
+
+Tranquilizer can serve functions written in Python source (`.py`) files or Jupyter Notebooks (`.ipynb`).
+
+When working interactively in Jupyter Notebooks the decorated functions will continue to operate as normal.
+Note that all calls to [Jupyter Magic](https://ipython.readthedocs.io/en/stable/interactive/magics.html)
+and Shell (`!`) commands will be ignored when the REST API is served.
+Only those lines will be ignored, the rest of the cell will continue to run.
+
 ## Data Types
 
 In addition to [*builtin* types](https://docs.python.org/3/library/stdtypes.html) Tranquilizer 

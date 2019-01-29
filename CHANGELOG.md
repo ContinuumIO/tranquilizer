@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.0] - 2019-01-23
+## Added
+- Support serving from Jupyter Notebooks
+
 ## [0.1.2] - 2018-12-29
 ### Added
 - Customize application name in Swagger with `--name`

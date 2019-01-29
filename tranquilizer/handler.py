@@ -1,30 +1,59 @@
 '''execute the script file'''
 import ast
 from runpy import run_path
-
-def _parse_script(fn):
-    with open(fn, 'r') as f:
-        source = f.read()
-
-    nodes = ast.parse(source, fn)
-    return nodes
-
+from unittest.mock import MagicMock
+from os.path import dirname, join, basename
+import tempfile
 
 def _is_tranquilized(decorator):
     return hasattr(decorator, 'id') and (decorator.id in ('tranquilize',))
-
 
 def _is_decorated(item):
     if isinstance(item, ast.FunctionDef):
         return any([_is_tranquilized(d.func) for d in item.decorator_list])
 
 
-def get_tranquilized_functions(fn):
-    nodes = _parse_script(fn)
-    tranquilized = [f.name for f in nodes.body if _is_decorated(f)]
+class BaseHandler(object):
 
-    module = run_path(fn)
-    funcs = [module[f] for f in tranquilized]
+    def parse(self):
+        raise NotImplementedError()
 
-    return funcs
+    @property
+    def tranquilized_functions(self):
+        self.parse()
+
+        tranquilized = [f.name for f in self.nodes.body if _is_decorated(f)]
+        functions = [self.module[f] for f in tranquilized]
+    
+        return functions
+
+
+class ScriptHandler(BaseHandler):
+    def __init__(self, fn):
+        self.fn = fn
+
+    def parse(self):
+        with open(self.fn, 'r') as f:
+            source = f.read()
+
+        self.nodes = ast.parse(source, self.fn)
+        self.module = run_path(self.fn)
+
+
+class NotebookHandler(BaseHandler):
+    def __init__(self, fn):
+        self.fn = fn
+    
+    def parse(self):
+        from nbconvert import ScriptExporter
+
+        exporter = ScriptExporter()
+        source, _ = exporter.from_filename(self.fn)
+
+        self.nodes = ast.parse(source, self.fn)
+
+        with tempfile.NamedTemporaryFile(mode='w', dir=dirname(self.fn)) as tmp:
+            tmp.write(source)
+            tmp.flush()
+            self.module = run_path(tmp.name, init_globals={'get_ipython':MagicMock()})
 
