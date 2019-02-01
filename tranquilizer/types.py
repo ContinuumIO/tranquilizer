@@ -60,7 +60,7 @@ class NDArray(File):
 class ParsedDateTime(Generic[T]):
     '''A flexible dateteime.datetime class
 
-    recieves a string: use dateutil to parse
+    receives a string: use dateutil to parse
     
     The type specifier determines the returned type.
     ParsedDateTime[datetime.date]
