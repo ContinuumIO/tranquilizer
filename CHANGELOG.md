@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.1] - 2019-03-06
+## Added
+- Set maximum content length for all endpoints
+- Allow --port, --address, and --prefix arguments
+
 ## [0.2.0] - 2019-01-23
 ## Added
 - Support serving from Jupyter Notebooks
