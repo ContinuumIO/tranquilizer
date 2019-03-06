@@ -3,8 +3,6 @@ from dateutil.parser import parse
 from datetime import datetime, date
 from typing import List, Generic, TypeVar, TextIO, BinaryIO
 from werkzeug.datastructures import FileStorage
-from PIL import Image as pil_image
-import numpy as np
 import io
 
 T = TypeVar('T')
@@ -44,7 +42,13 @@ class Image(File):
     __schema__ = {'type':'file', 'format':'image'}
     __description__ = 'Read image file as PIL.Image.'
     def __new__(cls, *args, **kwargs):
+        try:
+            from PIL import Image as pil_image
+        except ImportError as e:
+            e.args = ("Please install pillow to define an image type.",)
+            raise e
         f = super().__new__(cls, *args, **kwargs)
+
         return pil_image.open(f)
 
 
@@ -53,6 +57,11 @@ class NDArray(File):
     __schema__ = {'type':'file', 'format':'NumPy array'}
     __description__ = 'NumPy array file.'
     def __new__(cls, *args, **kwargs):
+        try:
+            import numpy as np
+        except ImportError as e:
+            e.args = ("Please install NumPy to define an array type.",)
+            raise e
         f = super().__new__(cls, *args, **kwargs)
         return np.load(f)
 
@@ -61,7 +70,7 @@ class ParsedDateTime(Generic[T]):
     '''A flexible dateteime.datetime class
 
     receives a string: use dateutil to parse
-    
+
     The type specifier determines the returned type.
     ParsedDateTime[datetime.date]
     ParsedDateTime[datetime.datetime]
@@ -97,10 +106,22 @@ class TypedList(List, Generic[T]):
 
 def type_mapper(type_):
     '''Map common type hints to custom classes
-    
+
     If no conversion is necessary the input type
     is returned.
     '''
+
+    try:
+        from PIL import Image as pil_image
+        has_pil_image = True
+    except ImportError:
+        has_pil_image = False
+
+    try:
+        import numpy as np
+        has_numpy = True
+    except ImportError:
+        has_numpy = False
 
     if issubclass(type_, List):
         try:
@@ -112,11 +133,11 @@ def type_mapper(type_):
         return TextFile
     elif issubclass(type_, BinaryIO):
         return File
-    elif issubclass(type_, pil_image.Image):
-        return Image
-    elif issubclass(type_, np.ndarray):
-        return NDArray
     elif issubclass(type_, (datetime, date)):
         return ParsedDateTime[type_]
+    elif has_pil_image and issubclass(type_, pil_image.Image):
+        return Image
+    elif has_numpy and issubclass(type_, np.ndarray):
+        return NDArray
     else:
         return type_

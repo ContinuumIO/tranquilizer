@@ -1,12 +1,16 @@
 # Changelog
 
+## [0.3.0] - 2019-03-06
+### Changed
+- pillow and numpy not required
+
 ## [0.2.1] - 2019-03-06
-## Added
+### Added
 - Set maximum content length for all endpoints
 - Allow --port, --address, and --prefix arguments
 
 ## [0.2.0] - 2019-01-23
-## Added
+### Added
 - Support serving from Jupyter Notebooks
 
 ## [0.1.2] - 2018-12-29

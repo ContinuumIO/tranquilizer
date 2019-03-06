@@ -5,7 +5,7 @@ from datetime import date
 @tranquilize(method='get')
 def dates(date: date):
     '''Extract components of a datetime string.
-    
+
     :param date: parsible datetime'''
 
     response = {

@@ -15,7 +15,7 @@ import numpy as np
 @tranquilize('post')
 def text_file(file: TextIO):
     '''read a text file
-    
+
     :param file: plain text file'''
     return {'response':file.read()}
 
