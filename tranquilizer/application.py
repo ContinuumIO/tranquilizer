@@ -14,17 +14,23 @@ def cli():
     parser.add_argument('--max_content_length', type=int,
             help='Maximum size of request in bytes for all endpoints')
 
+    parser.add_argument('--port', '--anaconda-project-port', action='store', default=8086, type=int,
+                        help='Port to listen on')
+    parser.add_argument('--address', '--anaconda-project-address',
+                        action='store',
+                        default='0.0.0.0',
+                        help='IP address the application should listen on.')
+    parser.add_argument('--prefix','--anaconda-project-url-prefix', action='store', default='',
+                        help='Prefix in front of urls')
 
     parser.add_argument('--debug', action='store_true', default=False,
                         help='Run API with debug output.')
     parser.add_argument('--version', action='version',
                     version='%(prog)s {version}'.format(version=__version__))
 
-    # arg parser for the standard anaconda-project options
+    # these anaconda-project arguments are ignored by Tranquilizer
     parser.add_argument('--anaconda-project-host', action='append', default=[],
                         help='Hostname to allow in requests')
-    parser.add_argument('--anaconda-project-port', action='store', default=8086, type=int,
-                        help='Port to listen on')
     parser.add_argument('--anaconda-project-iframe-hosts',
                         action='append',
                         help='Space-separated hosts which can embed us in an iframe per our Content-Security-Policy')
@@ -35,12 +41,6 @@ def cli():
                         action='store_true',
                         default=False,
                         help='Trust X-headers from reverse proxy')
-    parser.add_argument('--anaconda-project-url-prefix', action='store', default='',
-                        help='Prefix in front of urls')
-    parser.add_argument('--anaconda-project-address',
-                        action='store',
-                        default='0.0.0.0',
-                        help='IP address the application should listen on.')
 
     return parser
 
