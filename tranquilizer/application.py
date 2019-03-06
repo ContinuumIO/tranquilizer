@@ -11,6 +11,10 @@ def cli():
                             description="Put your functions to REST")
     parser.add_argument('filename', help='Script file with tranquilized functions')
     parser.add_argument('--name', help='Name of the REST API to use in Swagger')
+    parser.add_argument('--max_content_length', type=int,
+            help='Maximum size of request in bytes for all endpoints')
+
+
     parser.add_argument('--debug', action='store_true', default=False,
                         help='Run API with debug output.')
     parser.add_argument('--version', action='version',
@@ -41,10 +45,12 @@ def cli():
     return parser
 
 
-def make_app(functions, name, prefix='/'):
+def make_app(functions, name, prefix='/', max_content_length=None):
     api = Api(title=name)
     app = Flask(__name__)
     app.config['PREFERRED_URL_SCHEME'] = 'https'
+    if max_content_length is not None:
+        app.config['MAX_CONTENT_LENGTH'] = max_content_length
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
     @api.errorhandler
