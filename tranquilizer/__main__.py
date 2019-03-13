@@ -15,6 +15,11 @@ def main():
     if extension == 'py':
         source = ScriptHandler(args.filename)
     elif extension == 'ipynb':
+        try:
+            import nbconvert
+        except ImportError as e:
+            raise ImportError("Please install nbconvert to serve Jupyter Notebooks.") from e
+
         source = NotebookHandler(args.filename)
     else:
         raise UnsupportedFileType('{} is not a script (.py) or notebook (.ipynb)'.format(args.filename))

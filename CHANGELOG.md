@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.1] - 2019-03-13
+### Changed
+- Report when nbconvert is not installed, but needed
+
 ## [0.3.0] - 2019-03-06
 ### Changed
 - pillow and numpy not required
