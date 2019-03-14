@@ -7,7 +7,7 @@ Deploy a REST API with one line by decorating your functions.
 The package is available for all Mac, Linux, and Windows on my conda channel. Python 2 is not supported.
 
 ```
-> conda install -c defusco tranquilizer
+> conda install -c conda-forge tranquilizer
 ```
 
 ## Quick start
