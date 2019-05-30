@@ -16,7 +16,7 @@ def _prepare_arg(arg):
         _arg["type"] = str(arg.annotation.__name__)
         _arg["annotation"] = arg.annotation
 
-    if arg.empty != arg.default:
+    if arg.empty is not arg.default:
         _arg['default'] = arg.default
 
     return _arg
@@ -27,7 +27,7 @@ def _prepare_arg_docs(docstring):
 
     if not args:
         return {}, remainder
-    
+
     docs = {}
     for arg in args:
         docs[arg[0]] = arg[1].strip()
@@ -42,7 +42,7 @@ def _prepare_error_docs(docstring):
         messages = '\n'.join('{}:{}'.format(e,msg.strip()) for e,msg in errors)
         responses = {500:messages}
         return responses, remainder
-    
+
     return None, remainder
 
 def _prepare(fn):

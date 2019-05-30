@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.2] - 2019-05-30
+### Changed
+- Updated setup.py to include more classifiers and requirements
+- Python 3.7 typing.List and derivatives does not work
+
 ## [0.3.1] - 2019-03-13
 ### Changed
 - Report when nbconvert is not installed, but needed

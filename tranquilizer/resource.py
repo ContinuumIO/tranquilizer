@@ -7,12 +7,13 @@ from .types import is_container, type_mapper
 
 
 def _make_parser(func_spec, location='args'):
-    '''Create RequestParser from anotated function arguments
+    '''Create RequestParser from annotated function arguments
 
     arguments without default values are flagged as required'''
 
     parser = reqparse.RequestParser(bundle_errors=True)
     for argument,spec in func_spec['args'].items():
+
         _type = spec.get('annotation', str)
         _default = spec.get('default', None)
         action = 'store'
@@ -43,7 +44,7 @@ def _make_parser(func_spec, location='args'):
 
         parser.add_argument(argument, type=_type,
                             default=_default,
-                            required=(not _default),
+                            required=(not 'default' in spec),
                             location=_location,
                             action=action,
                             help=doc)
@@ -52,10 +53,10 @@ def _make_parser(func_spec, location='args'):
 
 
 def make_resource(func, api):
-    location = 'form' if func._method == 'post' else 'args'
+    location = 'form' if func._method in ['put','post'] else 'args'
     parser = _make_parser(func._spec, location=location)
 
-    @api.expect(parser, validate=True)
+    @api.expect(parser, validate=True, strict=True)
     def _method(self):
         request = parser.parse_args()
         output = func(**request)
