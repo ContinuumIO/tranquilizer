@@ -53,7 +53,25 @@ def _make_parser(func_spec, location='args'):
 
 
 def make_resource(func, api):
-    location = 'form' if func._method in ['put','post'] else 'args'
+    if func._methods:
+        return _make_resources(func, api)
+    else:
+        return _make_resource(func, api, func._method)
+
+
+def _make_resources(func, api):
+    '''Provide compatibility with web-publisher'''
+    resources = {}
+    for m in func._methods:
+        resources[m] = getattr(_make_resource(func, api, m), m)
+        
+    Tranquilized = type('Tranquilized', (Resource,), resources)
+
+    return Tranquilized
+
+
+def _make_resource(func, api, method):
+    location = 'form' if method in ['put','post'] else 'args'
     parser = _make_parser(func._spec, location=location)
 
     @api.expect(parser, validate=True, strict=True)
@@ -68,7 +86,7 @@ def make_resource(func, api):
 
     _method.__doc__ = func._spec['docstring']
 
-    Tranquilized = type('Tranquilized', (Resource,), {func._method:_method})
+    Tranquilized = type('Tranquilized', (Resource,), {method:_method})
 
     return Tranquilized
 
