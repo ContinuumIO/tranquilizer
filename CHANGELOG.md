@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.3] - 2019-09-06
+## Changed
+- Fixed ProxyFix call for werkzeug>=0.15
+
 ## [0.3.2] - 2019-05-30
 ### Changed
 - Updated setup.py to include more classifiers and requirements
