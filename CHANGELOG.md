@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.4] - 2019-09-05
+### Added
+- Compatibility with web-publisher: methods=[]
+- When methods is set un-typed arguments are returned
+  as a list-of-strings.
+
 ## [0.3.2] - 2019-05-30
 ### Changed
 - Updated setup.py to include more classifiers and requirements

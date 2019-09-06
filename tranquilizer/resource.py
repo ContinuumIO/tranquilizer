@@ -2,28 +2,40 @@
 from flask import jsonify, request
 from flask_restplus import Resource, reqparse
 from collections import Mapping, Sequence
+from typing import List
 
 from .types import is_container, type_mapper
 
 
-def _make_parser(func_spec, location='args'):
+def _make_parser(func_spec, location='args', compat=False):
     '''Create RequestParser from annotated function arguments
 
-    arguments without default values are flagged as required'''
+    arguments without default values are flagged as required
+
+    Parameters
+    ----------
+    :param func_spec: The decorated functions spec
+    :param location: expected location of arguments in request
+                     'args', or 'body'
+    :param compat: If compatability with anaconda-enterprise-web-publisher
+                   is reauired. (default: False)
+    '''
 
     parser = reqparse.RequestParser(bundle_errors=True)
     for argument,spec in func_spec['args'].items():
 
-        _type = spec.get('annotation', str)
+        # un-typed arguments are returned to the
+        # function as a list of strings
+        if compat and spec.get('annotation', None) is None:
+            action = 'append'
+            _type = List[str]
+        else:
+            _type = spec.get('annotation', str)
+            action = 'store'
+
         _default = spec.get('default', None)
-        action = 'store'
 
         _type = type_mapper(_type)
-
-#       try:
-#           description = getattr(_type, '__description__')
-#       except AttributeError:
-#           description = None
 
         doc = func_spec['param_docs'].get(argument, None)
 
@@ -64,7 +76,7 @@ def _make_resources(func, api):
     resources = {}
     for m in func._methods:
         resources[m] = getattr(_make_resource(func, api, m), m)
-        
+
     Tranquilized = type('Tranquilized', (Resource,), resources)
 
     return Tranquilized
@@ -72,7 +84,8 @@ def _make_resources(func, api):
 
 def _make_resource(func, api, method):
     location = 'form' if method in ['put','post'] else 'args'
-    parser = _make_parser(func._spec, location=location)
+    compat = True if func._methods is not None else False
+    parser = _make_parser(func._spec, location=location, compat=compat)
 
     @api.expect(parser, validate=True, strict=True)
     def _method(self):
