@@ -14,7 +14,7 @@ build:
 
 requirements:
     run:
-        - python
+        - python >=3.5, <3.7
         - flask
         - werkzeug
         - python-dateutil
