@@ -1,22 +1,31 @@
 from collections import Mapping, Sequence
 from dateutil.parser import parse
 from datetime import datetime, date
-from typing import List, Generic, TypeVar, TextIO, BinaryIO
+from typing import TextIO, BinaryIO
 from werkzeug.datastructures import FileStorage
 import io
-
-T = TypeVar('T')
-S = TypeVar('S')
 
 def is_container(type_):
     '''Test if provided type function is a scalar
 
     strings and bytes are considered to be scalars.'''
 
+    if hasattr(type_, '__origin__'):
+        # Due to PEP560 we need to handle new typing
+        # classes carefully
+        return issubclass(type_.__origin__, Sequence)
+
     container = issubclass(type_, Sequence) or (issubclass(type_, Mapping))
     basic_scalars = issubclass(type_, str) or issubclass(type_, bytes)
 
     return  (not basic_scalars) and container
+
+
+def is_list_subclass(type_):
+    if hasattr(type_, '__origin__'):
+        return issubclass(type_.__origin__, list)
+    else:
+        return issubclass(type_, list)
 
 
 class File(FileStorage):
@@ -67,42 +76,38 @@ class NDArray(File):
         return np.load(f)
 
 
-class ParsedDateTime(Generic[T]):
-    '''A flexible dateteime.datetime class
+def dt_factory(type_):
+    class ParsedDatetime(object):
+        '''A flexible dateteime.datetime class
 
-    receives a string: use dateutil to parse
-
-    The type specifier determines the returned type.
-    ParsedDateTime[datetime.date]
-    ParsedDateTime[datetime.datetime]
-    ParsedDateTime[pd.Timestamp]
-    '''
-    __schema__ = {'type':'string', 'format':'date-time'}
-    __description__ = 'dateutil.parser.parse compatible datetime string'
-
-    def __new__(cls, *args):
-        parsed =  parse(args[0])
-        _type = cls.__args__[0]
-        if issubclass(_type, date):
-            return parsed.date()
-        else:
-            return _type(parsed)
-        return parsed
+        receives a string returns datetime object
+        '''
+        __schema__ = {'type':'string', 'format':'date-time'}
+        __description__ = 'dateutil.parser.parse compatible datetime string'
+        def __new__(cls, *args):
+            parsed =  parse(args[0])
+            if issubclass(type_, date):
+                return parsed.date()
+            else:
+                return type_(parsed)
+            return parsed
+    return ParsedDatetime
 
 
-class TypedList(List, Generic[T]):
-    '''An dummy typed list
+def list_factory(type_):
+    # helps with List[datetime] usage
+    type_ = type_mapper(type_)
+    class TypedList(Sequence):
+        # using append with flask-restplus
+        # means that list is constructed later
 
-    This class supports specialization with [].
-
-    fList = List[float]
-
-    It is expected to only receive one input.'''
-    __schema__ = {'type':'string'}
-
-    def __new__(cls, *args, **kwds):
-        _type = cls.__args__[0]
-        return _type(*args)
+        def __new__(cls, arg):
+            if hasattr(type_, '__schema__'):
+                cls.__schema__ = type_.__schema__
+            else:
+                cls.__schema__ = {'type':type_.__name__}
+            return type_(arg)
+    return TypedList
 
 
 def type_mapper(type_):
@@ -123,19 +128,19 @@ def type_mapper(type_):
         has_numpy = True
     except ImportError:
         has_numpy = False
-    
-    if issubclass(type_, List):
+
+    if is_list_subclass(type_):
         try:
             item_type = type_.__args__[0]
         except:
             item_type = str
-        return TypedList[item_type]
+        return list_factory(item_type)
     elif issubclass(type_, TextIO):
         return TextFile
     elif issubclass(type_, BinaryIO):
         return File
     elif issubclass(type_, (datetime, date)):
-        return ParsedDateTime[type_]
+        return dt_factory(type_)
     elif has_pil_image and issubclass(type_, pil_image.Image):
         return Image
     elif has_numpy and issubclass(type_, np.ndarray):

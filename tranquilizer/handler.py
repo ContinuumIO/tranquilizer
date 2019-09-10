@@ -24,7 +24,7 @@ class BaseHandler(object):
 
         tranquilized = [f.name for f in self.nodes.body if _is_decorated(f)]
         functions = [self.module[f] for f in tranquilized]
-    
+
         return functions
 
 
@@ -43,7 +43,7 @@ class ScriptHandler(BaseHandler):
 class NotebookHandler(BaseHandler):
     def __init__(self, fn):
         self.fn = fn
-    
+
     def parse(self):
         from nbconvert import ScriptExporter
 
@@ -52,7 +52,7 @@ class NotebookHandler(BaseHandler):
 
         self.nodes = ast.parse(source, self.fn)
 
-        with tempfile.NamedTemporaryFile(mode='w', dir=dirname(self.fn)) as tmp:
+        with tempfile.NamedTemporaryFile(mode='w', dir=dirname(self.fn), delete=True) as tmp:
             tmp.write(source)
             tmp.flush()
             self.module = run_path(tmp.name, init_globals={'get_ipython':MagicMock()})
