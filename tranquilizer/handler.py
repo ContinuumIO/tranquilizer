@@ -6,7 +6,7 @@ from os.path import dirname, join, basename
 import tempfile
 
 def _is_tranquilized(decorator):
-    return hasattr(decorator, 'id') and (decorator.id in ('tranquilize',))
+    return hasattr(decorator, 'id') and (decorator.id in ('tranquilize', 'publish'))
 
 def _is_decorated(item):
     if isinstance(item, ast.FunctionDef):
