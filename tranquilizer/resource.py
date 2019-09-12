@@ -51,8 +51,8 @@ def _make_parser(func_spec, location='args', compat=False):
 
         if is_container(_type):
             action = 'append'
-            type_name = _type.__args__[0].__name__
-            _type.__schema__ = {'type':type_name}
+            #type_name = _type.__args__[0].__name__
+            #_type.__schema__ = {'type':type_name}
 
         parser.add_argument(argument, type=_type,
                             default=_default,

@@ -46,7 +46,7 @@ setup(
         "Intended Audience :: Developers",
         "Environment :: Web Environment"
     ],
-    python_requires=">=3.5, <3.7",
+    python_requires=">=3.5, <3.8",
     install_requires=install_requires,
     extrax_require=extras_require,
     long_description=long_description,

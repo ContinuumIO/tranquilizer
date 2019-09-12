@@ -13,7 +13,11 @@ def _prepare_arg(arg):
     }
 
     if arg.annotation != arg.empty:
-        _arg["type"] = str(arg.annotation.__name__)
+        try:
+            name = str(arg.annotation.__name__)
+        except AttributeError:
+            name = str(arg.annotation._name)
+        _arg["type"] = name
         _arg["annotation"] = arg.annotation
 
     if arg.empty is not arg.default:

@@ -8,22 +8,21 @@ source:
   path: ../
 
 build:
-  number: 0
   noarch: python
   script: python setup.py install --single-version-externally-managed --record=record.txt
   entry_points:
-    - tranquilizer = tranquilizer.__main__:main
+      - tranquilizer = tranquilizer.__main__:main
 
 requirements:
   run:
-    - python >=3.5, <3.7
-    - flask
-    - werkzeug
-    - python-dateutil
-    - flask-restplus
+   - python >=3.5, <3.8
+   - flask
+   - werkzeug
+   - python-dateutil
+   - flask-restplus
   build:
-    - python >=3.5, <3.7
-    - setuptools
+   - python >=3.5, <3.8
+   - setuptools
 
 about:
   license: {{ setup_py.get('license') }}
