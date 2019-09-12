@@ -8,6 +8,9 @@ import numpy as np
 
 @tranquilize(method='post')
 def describe_image(image: Image):
+    '''Tell me something about my image
+    
+    :param image: image file in any format compatible with PIL'''
     as_array = np.array(image)
 
     response = {

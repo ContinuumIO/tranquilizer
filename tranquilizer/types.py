@@ -12,6 +12,7 @@ def is_container(type_):
     '''Test if provided type function is a scalar
 
     strings and bytes are considered to be scalars.'''
+
     container = issubclass(type_, Sequence) or (issubclass(type_, Mapping))
     basic_scalars = issubclass(type_, str) or issubclass(type_, bytes)
 
@@ -122,7 +123,7 @@ def type_mapper(type_):
         has_numpy = True
     except ImportError:
         has_numpy = False
-
+    
     if issubclass(type_, List):
         try:
             item_type = type_.__args__[0]

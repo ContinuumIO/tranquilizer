@@ -1,10 +1,14 @@
 # Changelog
 
-## [0.3.4] - 2019-09-05
+## [0.3.4] - 2019-09-12
 ### Added
 - Compatibility with web-publisher: methods=[]
 - When methods is set un-typed arguments are returned
   as a list-of-strings.
+
+## [0.3.3] - 2019-09-06
+## Changed
+- Fixed ProxyFix call for werkzeug>=0.15
 
 ## [0.3.2] - 2019-05-30
 ### Changed

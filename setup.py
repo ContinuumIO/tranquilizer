@@ -44,13 +44,13 @@ setup(
         "Operating System :: OS Independent",
         "Intended Audience :: Science/Research",
         "Intended Audience :: Developers",
-        "Environment :: Web Environment",
-        "Topic :: WWW/HTTP :: Dynamic Content"
+        "Environment :: Web Environment"
     ],
     python_requires=">=3.5, <3.7",
     install_requires=install_requires,
     extrax_require=extras_require,
-    long_description=long_description
+    long_description=long_description,
+    long_description_content_type='text/markdown'
 
 )
 
