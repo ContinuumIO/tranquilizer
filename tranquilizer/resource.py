@@ -1,5 +1,5 @@
 '''construct flask-restplus resources'''
-from flask import jsonify, request
+from flask import jsonify
 from flask_restplus import Resource, reqparse
 from collections import Mapping, Sequence
 from typing import List
@@ -22,21 +22,20 @@ def _make_parser(func_spec, location='args', compat=False):
     '''
 
     parser = reqparse.RequestParser(bundle_errors=True)
-    for argument,spec in func_spec['args'].items():
-
-        # un-typed arguments are returned to the
-        # function as a list of strings
+    for argument, spec in func_spec['args'].items():
         if compat and spec.get('annotation', None) is None:
+            # un-typed arguments are returned to the
+            # function as a list of strings by @publish
             action = 'append'
             _type = List[str]
         else:
+            # @tranquilize assumes untyped
+            # arguments are strings
             _type = spec.get('annotation', str)
             action = 'store'
 
         _default = spec.get('default', None)
-
         _type = type_mapper(_type)
-
         doc = func_spec['param_docs'].get(argument, None)
 
         # Files (e.g., images) arrive in a different
@@ -48,15 +47,12 @@ def _make_parser(func_spec, location='args', compat=False):
         except AttributeError:
             _location = location
 
-
         if is_container(_type):
             action = 'append'
-            #type_name = _type.__args__[0].__name__
-            #_type.__schema__ = {'type':type_name}
 
         parser.add_argument(argument, type=_type,
                             default=_default,
-                            required=(not 'default' in spec),
+                            required=(not ('default' in spec)),
                             location=_location,
                             action=action,
                             help=doc)
@@ -89,8 +85,8 @@ def _make_resource(func, api, method):
 
     @api.expect(parser, validate=True, strict=True)
     def _method(self):
-        request = parser.parse_args()
-        output = func(**request)
+        req = parser.parse_args()
+        output = func(**req)
         return jsonify(output)
 
     error_docs = func._spec['error_docs']

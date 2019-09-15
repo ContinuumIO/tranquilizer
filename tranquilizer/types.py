@@ -3,6 +3,8 @@ from dateutil.parser import parse
 from datetime import datetime, date
 from typing import TextIO, BinaryIO
 from werkzeug.datastructures import FileStorage
+from flask_restplus.reqparse import PY_TYPES
+from flask_restplus import fields
 import io
 
 def is_container(type_):
@@ -18,7 +20,7 @@ def is_container(type_):
     container = issubclass(type_, Sequence) or (issubclass(type_, Mapping))
     basic_scalars = issubclass(type_, str) or issubclass(type_, bytes)
 
-    return  (not basic_scalars) and container
+    return (not basic_scalars) and container
 
 
 def is_list_subclass(type_):
@@ -76,37 +78,41 @@ class NDArray(File):
         return np.load(f)
 
 
-def dt_factory(type_):
+def dt_factory(type_, schema=None):
     class ParsedDatetime(object):
-        '''A flexible dateteime.datetime class
+        '''A flexible datetime class
 
         receives a string returns datetime object
         '''
-        __schema__ = {'type':'string', 'format':'date-time'}
+        __schema__ = {'type': 'string'} #, 'format':'date-time'}
         __description__ = 'dateutil.parser.parse compatible datetime string'
-        def __new__(cls, *args):
-            parsed =  parse(args[0])
-            if issubclass(type_, date):
-                return parsed.date()
+        def __new__(cls, arg):
+            if isinstance(type_, date):
+                return parse(arg).date()
+            elif isinstance(type_, datetime):
+                return parse(arg)
             else:
-                return type_(parsed)
-            return parsed
+                # most commonly used for pd.TimeStamp.
+                # any method that can take a string
+                return type_(arg)
+
+    if schema:
+        ParsedDatetime.__schema__ = schema
+
     return ParsedDatetime
 
 
 def list_factory(type_):
-    # helps with List[datetime] usage
-    type_ = type_mapper(type_)
+    items = getattr(type_, '__schema__', {}).get('type', PY_TYPES.get(type_, 'string'))
+
     class TypedList(Sequence):
         # using append with flask-restplus
         # means that list is constructed later
-
+        __schema__ = {'type': items}
+        __description__ = 'List with values of type {}'.format(items)
         def __new__(cls, arg):
-            if hasattr(type_, '__schema__'):
-                cls.__schema__ = type_.__schema__
-            else:
-                cls.__schema__ = {'type':type_.__name__}
             return type_(arg)
+
     return TypedList
 
 
@@ -132,7 +138,9 @@ def type_mapper(type_):
     if is_list_subclass(type_):
         try:
             item_type = type_.__args__[0]
-        except:
+            if issubclass(item_type, (datetime, date)):
+                item_type = dt_factory(type_, schema={'type':'datetime'})
+        except AttributeError:
             item_type = str
         return list_factory(item_type)
     elif issubclass(type_, TextIO):
