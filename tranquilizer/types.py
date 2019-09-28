@@ -78,26 +78,23 @@ class NDArray(File):
         return np.load(f)
 
 
-def dt_factory(type_, schema=None):
-    class ParsedDatetime(object):
+def dt_factory(type_):
+    class ParsedDatetime(type):
         '''A flexible datetime class
 
         receives a string returns datetime object
         '''
-        __schema__ = {'type': 'string'} #, 'format':'date-time'}
+        __schema__ = {'type': 'string'}
         __description__ = 'dateutil.parser.parse compatible datetime string'
-        def __new__(cls, arg):
-            if isinstance(type_, date):
-                return parse(arg).date()
-            elif isinstance(type_, datetime):
+        def __new__(self, arg):
+            if type_ is datetime:
                 return parse(arg)
+            elif type_ is date:
+                return parse(arg).date()
             else:
                 # most commonly used for pd.TimeStamp.
                 # any method that can take a string
                 return type_(arg)
-
-    if schema:
-        ParsedDatetime.__schema__ = schema
 
     return ParsedDatetime
 
@@ -139,7 +136,7 @@ def type_mapper(type_):
         try:
             item_type = type_.__args__[0]
             if issubclass(item_type, (datetime, date)):
-                item_type = dt_factory(type_, schema={'type':'datetime'})
+                item_type = dt_factory(item_type)
         except AttributeError:
             item_type = str
         return list_factory(item_type)

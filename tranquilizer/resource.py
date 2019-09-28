@@ -17,8 +17,8 @@ def _make_parser(func_spec, location='args', compat=False):
     :param func_spec: The decorated functions spec
     :param location: expected location of arguments in request
                      'args', or 'body'
-    :param compat: If compatability with anaconda-enterprise-web-publisher
-                   is reauired. (default: False)
+    :param compat: If compatibility with anaconda-enterprise-web-publisher
+                   is required. (default: False)
     '''
 
     parser = reqparse.RequestParser(bundle_errors=True)
@@ -80,7 +80,7 @@ def _make_resources(func, api):
 
 def _make_resource(func, api, method):
     location = 'form' if method in ['put','post'] else 'args'
-    compat = True if func._methods is not None else False
+    compat = True if (func._methods is not None) else False
     parser = _make_parser(func._spec, location=location, compat=compat)
 
     @api.expect(parser, validate=True, strict=True)
@@ -91,7 +91,7 @@ def _make_resource(func, api, method):
 
     error_docs = func._spec['error_docs']
     if error_docs:
-        _method = api.doc(responses = error_docs)(_method)
+        _method = api.doc(responses=error_docs)(_method)
 
     _method.__doc__ = func._spec['docstring']
 
