@@ -1,4 +1,4 @@
-from collections import Mapping, Sequence
+from collections.abc import Mapping, Sequence
 from dateutil.parser import parse
 from datetime import datetime, date
 from typing import TextIO, BinaryIO
@@ -56,7 +56,7 @@ class Image(File):
     def __new__(cls, *args, **kwargs):
         try:
             from PIL import Image as pil_image
-        except ImportError as e:
+        except ImportError as e: # pragma: no cover
             e.args = ("Please install pillow to define an image type.",)
             raise e
         f = super().__new__(cls, *args, **kwargs)
@@ -71,12 +71,11 @@ class NDArray(File):
     def __new__(cls, *args, **kwargs):
         try:
             import numpy as np
-        except ImportError as e:
+        except ImportError as e: # pragma: no cover
             e.args = ("Please install NumPy to define an array type.",)
             raise e
         f = super().__new__(cls, *args, **kwargs)
         return np.load(f)
-
 
 def dt_factory(type_):
     class ParsedDatetime(type):
@@ -109,7 +108,7 @@ def list_factory(type_):
         __description__ = 'List with values of type {}'.format(items)
         def __new__(cls, arg):
             return type_(arg)
-
+        
     return TypedList
 
 
@@ -123,13 +122,13 @@ def type_mapper(type_):
     try:
         from PIL import Image as pil_image
         has_pil_image = True
-    except ImportError:
+    except ImportError: # pragma: no cover 
         has_pil_image = False
 
     try:
         import numpy as np
         has_numpy = True
-    except ImportError:
+    except ImportError: # pragma: no cover 
         has_numpy = False
 
     if is_list_subclass(type_):
@@ -137,7 +136,7 @@ def type_mapper(type_):
             item_type = type_.__args__[0]
             if issubclass(item_type, (datetime, date)):
                 item_type = dt_factory(item_type)
-        except AttributeError:
+        except (AttributeError, TypeError):
             item_type = str
         return list_factory(item_type)
     elif issubclass(type_, TextIO):
