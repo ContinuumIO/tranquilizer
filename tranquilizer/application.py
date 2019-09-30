@@ -4,8 +4,6 @@ from flask_restplus import Api, Namespace
 
 from .resource import make_resource
 
-
-
 def make_app(functions, name, prefix='/', max_content_length=None):
     api = Api(title=name)
     app = Flask(__name__)
