@@ -15,7 +15,7 @@ def _is_decorated(item):
 
 class BaseHandler(object):
 
-    def parse(self):
+    def parse(self): # pragma no cover
         raise NotImplementedError()
 
     @property

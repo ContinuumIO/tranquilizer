@@ -7,7 +7,7 @@ from typing import List
 from .types import is_container, type_mapper
 
 
-def _make_parser(func_spec, location='args', compat=False):
+def make_parser(func_spec, location='args', compat=False):
     '''Create RequestParser from annotated function arguments
 
     arguments without default values are flagged as required
@@ -81,7 +81,7 @@ def _make_resources(func, api):
 def _make_resource(func, api, method):
     location = 'form' if method in ['put','post'] else 'args'
     compat = True if (func._methods is not None) else False
-    parser = _make_parser(func._spec, location=location, compat=compat)
+    parser = make_parser(func._spec, location=location, compat=compat)
 
     @api.expect(parser, validate=True, strict=True)
     def _method(self):
