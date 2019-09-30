@@ -12,7 +12,8 @@ def is_container(type_):
 
     strings and bytes are considered to be scalars.'''
 
-    if hasattr(type_, '__origin__'):
+    origin = getattr(type_, '__origin__', None)
+    if origin is not None:
         # Due to PEP560 we need to handle new typing
         # classes carefully
         return issubclass(type_.__origin__, Sequence)
@@ -24,7 +25,8 @@ def is_container(type_):
 
 
 def is_list_subclass(type_):
-    if hasattr(type_, '__origin__'):
+    origin = getattr(type_, '__origin__', None)
+    if origin is not None:
         return issubclass(type_.__origin__, list)
     else:
         return issubclass(type_, list)
