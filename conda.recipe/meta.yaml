@@ -9,20 +9,36 @@ source:
 
 build:
   noarch: python
-  script: python setup.py install --single-version-externally-managed --record=record.txt
+  script: {{ PYTHON }} -m pip install --no-deps --ignore-installed -vv .
   entry_points:
-      - tranquilizer = tranquilizer.__main__:main
+      - tranquilizer = tranquilizer.main:run
 
 requirements:
   run:
    - python >=3.5, <3.8
    - flask
-   - werkzeug
+   - werkzeug >=0.15
    - python-dateutil
    - flask-restplus
   build:
    - python >=3.5, <3.8
    - setuptools
+
+test:
+  source_files:
+    - tests
+  imports:
+    - tranquilizer
+  commands:
+    - tranquilizer --help
+    - py.test -xv tests
+  requires:
+   - pytest
+   - pytest-cov
+   - numpy
+   - pandas
+   - pillow
+   - nbconvert
 
 about:
   license: {{ setup_py.get('license') }}

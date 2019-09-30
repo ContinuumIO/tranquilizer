@@ -6,13 +6,14 @@ with open("README.md", "r") as fh:
 
 install_requires=[
     'flask',
-    'werkzeug',
+    'werkzeug>=0.15',
     'flask-restplus',
     'python-dateutil'
 ]
 
 extras_require={
     'recommended': [
+        'nbconvert',
         'numpy',
         'pillow'
     ]
@@ -32,13 +33,14 @@ setup(
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            'tranquilizer = tranquilizer.__main__:main'
+            'tranquilizer = tranquilizer.main:run'
         ]
     },
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "License :: OSI Approved :: BSD License",
         "Framework :: Flask",
         "Operating System :: OS Independent",
@@ -48,7 +50,7 @@ setup(
     ],
     python_requires=">=3.5, <3.8",
     install_requires=install_requires,
-    extrax_require=extras_require,
+    extras_require=extras_require,
     long_description=long_description,
     long_description_content_type='text/markdown'
 
