@@ -39,6 +39,7 @@ test:
    - pandas
    - pillow
    - nbconvert
+   - ipython
 
 about:
   license: {{ setup_py.get('license') }}

@@ -14,6 +14,7 @@ install_requires=[
 extras_require={
     'recommended': [
         'nbconvert',
+        'ipython',
         'numpy',
         'pillow'
     ]
