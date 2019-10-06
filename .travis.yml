@@ -15,6 +15,7 @@ install:
   - conda update -q conda
   - conda install conda-build anaconda-client pytest pytest-cov
   - conda config --set auto_update_conda no
+  - conda config --append channels conda-forge
   - conda build conda.recipe --no-test
   - conda create -n test python="$TRAVIS_PYTHON_VERSION"
   - conda install -n test --use-local tranquilizer
