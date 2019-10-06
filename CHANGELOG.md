@@ -1,10 +1,15 @@
 # Changelog
 
-## [0.3.4] - 2019-09-12
+## [x.x.x] - 2019-09-30
+### Changed
+- Added Python 3.7 support (rewrite typing type checking)
+- Utilize Versioneer
+
 ### Added
-- Compatibility with web-publisher: methods=[]
-- When methods is set un-typed arguments are returned
+- anaconda-enterprise @publish compatiblity
+- @publish: When methods is set un-typed arguments are returned
   as a list-of-strings.
+- nearly complete test coverage
 
 ## [0.3.3] - 2019-09-06
 ## Changed

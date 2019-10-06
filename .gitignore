@@ -2,9 +2,6 @@
 __pycache__/
 *.py[cod]
 *$py.class
-.DS_Store
-
-envs/
 
 # C extensions
 *.so
@@ -37,11 +34,38 @@ var/
 pip-log.txt
 pip-delete-this-directory.txt
 
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+.hypothesis/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# pyenv python configuration file
+.python-version
 
 #Ipython Notebook
 .ipynb_checkpoints
 
 # ide
 .vscode
+.idea
 
-builds/
+.DS_Store

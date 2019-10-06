@@ -1,4 +1,4 @@
-from version import find_version
+import versioneer
 from setuptools import setup, find_packages
 
 with open("README.md", "r") as fh:
@@ -30,7 +30,8 @@ setup(
     url='https://github.com/AlbertDeFusco/tranquilizer',
     license='BSD 3-clause',
     platforms=['Windows', 'Mac OS X', 'Linux'],
-    version=find_version('tranquilizer', '__init__.py'),
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     packages=find_packages(),
     entry_points={
         'console_scripts': [

@@ -11,7 +11,9 @@ build:
   noarch: python
   script: {{ PYTHON }} -m pip install --no-deps --ignore-installed -vv .
   entry_points:
-      - tranquilizer = tranquilizer.main:run
+    {% for entry in setup_py['entry_points']['console_scripts'] %}
+      - {{ entry.split('=')[0].strip() }} = {{ entry.split('=')[1].strip() }}
+    {% endfor %}
 
 requirements:
   run:
