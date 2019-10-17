@@ -15,7 +15,7 @@ install:
   - hash -r
   - conda config --append channels conda-forge
   - conda build conda.recipe --no-test
-  - conda install -n test --use-local tranquilizer numpy pandas pillow nbconvert ipython
+  - conda install --use-local tranquilizer numpy pandas pillow nbconvert ipython
 script:
   - pytest -v --color=yes --cov=tranquilizer tests
 after_success:
