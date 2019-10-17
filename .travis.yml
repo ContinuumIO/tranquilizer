@@ -13,6 +13,7 @@ install:
   - ./conda.exe create -p $HOME/miniconda python=$TRAVIS_PYTHON_VERSION conda conda-build anaconda-client pytest pytest-cov
   - export PATH="$HOME/miniconda/bin:$PATH"
   - hash -r
+  - conda update conda
   - conda config --append channels conda-forge
   - conda build conda.recipe --no-test
   - conda install --use-local tranquilizer numpy pandas pillow nbconvert ipython
