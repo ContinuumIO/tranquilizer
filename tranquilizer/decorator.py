@@ -13,7 +13,11 @@ def _prepare_arg(arg):
     }
 
     if arg.annotation != arg.empty:
-        _arg["type"] = str(arg.annotation.__name__)
+        try:
+            name = str(arg.annotation.__name__)
+        except AttributeError:
+            name = str(arg.annotation._name)
+        _arg["type"] = name
         _arg["annotation"] = arg.annotation
 
     if arg.empty is not arg.default:
@@ -89,6 +93,10 @@ def tranquilize(method='get'):
     """Decorator function that gets a function wraps it in order to
     append a function spec (see prepare function) and autocast args/kws
     to match types.
+
+    Parameters
+    ----------
+    :param method: str, HTTP method for this function. (default: 'get')
     """
 
     #just to be safe
@@ -97,6 +105,31 @@ def tranquilize(method='get'):
     def _dart(f):
         f._spec = _prepare(f)
         f._method = method
+        f._methods = None
+        return f
+
+    return _dart
+
+
+def publish(methods=['GET']):
+    """Decorator function that gets a function wraps it in order to
+    append a function spec (see prepare function) and autocast args/kws
+    to match types.
+
+    Parameters
+    ----------
+    :param methods: list, HTTP methods for this function.
+                    Provides compatibility with web-publisher.
+                    Takes precedence over method. (default: None)
+    """
+
+    # just to be safe
+    methods = [m.lower() for m in methods]
+
+    def _dart(f):
+        f._spec = _prepare(f)
+        f._method = None
+        f._methods = methods
         return f
 
     return _dart

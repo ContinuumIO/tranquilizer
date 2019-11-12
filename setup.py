@@ -1,4 +1,4 @@
-from version import find_version
+import versioneer
 from setuptools import setup, find_packages
 
 with open("README.md", "r") as fh:
@@ -6,13 +6,15 @@ with open("README.md", "r") as fh:
 
 install_requires=[
     'flask',
-    'werkzeug',
+    'werkzeug>=0.15',
     'flask-restplus',
     'python-dateutil'
 ]
 
 extras_require={
     'recommended': [
+        'nbconvert',
+        'ipython',
         'numpy',
         'pillow'
     ]
@@ -28,17 +30,19 @@ setup(
     url='https://github.com/AlbertDeFusco/tranquilizer',
     license='BSD 3-clause',
     platforms=['Windows', 'Mac OS X', 'Linux'],
-    version=find_version('tranquilizer', '__init__.py'),
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            'tranquilizer = tranquilizer.__main__:main'
+            'tranquilizer = tranquilizer.main:run'
         ]
     },
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "License :: OSI Approved :: BSD License",
         "Framework :: Flask",
         "Operating System :: OS Independent",
@@ -46,9 +50,9 @@ setup(
         "Intended Audience :: Developers",
         "Environment :: Web Environment"
     ],
-    python_requires=">=3.5, <3.7",
+    python_requires=">=3.5, <3.8",
     install_requires=install_requires,
-    extrax_require=extras_require,
+    extras_require=extras_require,
     long_description=long_description,
     long_description_content_type='text/markdown'
 

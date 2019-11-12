@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.4] - 2019-09-30
+### Changed
+- Added Python 3.7 support (rewrite type checking)
+- Utilize Versioneer
+
+### Added
+- anaconda-enterprise @publish compatiblity
+- @publish: When methods is set un-typed arguments are returned
+  as a list-of-strings.
+- nearly complete test coverage
+- Travis CI
+
 ## [0.3.3] - 2019-09-06
 ## Changed
 - Fixed ProxyFix call for werkzeug>=0.15
