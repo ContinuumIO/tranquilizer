@@ -1,6 +1,10 @@
 # Changelog
 
-## [0.4.4] - 2019-09-30
+## [0.4.1] - 2019-12-22
+### Fixed
+- Fixed tranquilizer.__version__
+
+## [0.4.0] - 2019-09-30
 ### Changed
 - Added Python 3.7 support (rewrite type checking)
 - Utilize Versioneer
