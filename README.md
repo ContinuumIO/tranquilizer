@@ -12,9 +12,10 @@ The package is available for all Mac, Linux, and Windows on my conda channel. Py
 
 ## Quick start
 
-In a script file called `cheese_shop.py` the decorated function
-will be served as an end point called `cheese` with the GET method. The
-function must return a JSON serializable object. Dictionaries are preferable.
+Tranquilizer can be used with either Jupyter Notebooks (`.ipynb`) or Python script files (`.py`).
+
+The decorated function below will be served as an end point called `cheese` with the GET method. The
+function must return a JSON serializable object.
 
 See the [complete description of `@tranquilize()`](#tranquilize-decorator) below.
 
@@ -24,7 +25,7 @@ from tranquilizer import tranquilize
 @tranquilize()
 def order(cheese):
     '''I'd like to buy some cheese!'''
-    return {'response':"I'm afraid we're fresh out of {}, Sir.".format(cheese)}
+    return "I'm afraid we're fresh out of {}, Sir.".format(cheese)
 ```
 
 The REST API is served by [Flask](http://flask.pocoo.org/) and [Flask-RESTPlus](http://flask-restplus.readthedocs.io/en/stable/index.html)
@@ -32,7 +33,7 @@ using the `tranquilizer` command.
 
 
 ```
-> tranquilizer cheese_shop.py
+> tranquilizer cheese_shop.ipynb
  * Serving Flask app "tranquilizer.application" (lazy loading)
  * Environment: production
    WARNING: Do not use the development server in a production environment.
@@ -46,10 +47,10 @@ Let's see if there is any Red Leicester.
 
 ```
 > curl -G http://localhost:8086/order --data-urlencode "cheese=Red Leicester"
-{"response":"I'm afraid we're fresh out of Red Leicester, Sir."}
+"I'm afraid we're fresh out of Red Leicester, Sir."
 ```
 
-How about in Python?
+or using the Requests library in Python.
 
 ```python
 In [1]: import requests
