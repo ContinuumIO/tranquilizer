@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 install_requires=[
     'flask',
-    'werkzeug>=0.15',
+    'werkzeug>=0.15,<1.0',
     'flask-restplus',
     'python-dateutil'
 ]
@@ -50,9 +50,10 @@ setup(
         "Intended Audience :: Developers",
         "Environment :: Web Environment"
     ],
-    python_requires=">=3.5, <3.8",
+    python_requires=">=3.5, <3.9",
     install_requires=install_requires,
     extras_require=extras_require,
+    include_package_data=True,
     long_description=long_description,
     long_description_content_type='text/markdown'
 
