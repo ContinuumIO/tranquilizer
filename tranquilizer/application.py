@@ -11,7 +11,7 @@ def make_app(functions, name, prefix='/', max_content_length=None):
     if max_content_length is not None:
         app.config['MAX_CONTENT_LENGTH'] = max_content_length
     app.wsgi_app = ProxyFix(app.wsgi_app,
-                            num_proxies=None,
+                            # num_proxies=None,
                             x_for=1, x_proto=1,
                             x_host=1, x_port=1,
                             x_prefix=1)
