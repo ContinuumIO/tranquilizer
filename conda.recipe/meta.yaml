@@ -19,11 +19,11 @@ requirements:
   run:
    - python >=3.5, <3.9
    - flask
-   - werkzeug >=0.15, <1.0
+   - werkzeug >=0.15, <2.0
    - python-dateutil
    - flask-restx
   build:
-   - python >=3.5, <3.8
+   - python >=3.5, <3.9
    - setuptools
 
 test:
