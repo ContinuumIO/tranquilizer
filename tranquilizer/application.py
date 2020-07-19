@@ -1,6 +1,6 @@
 from flask import Flask
 from werkzeug.middleware.proxy_fix import ProxyFix
-from flask_restplus import Api, Namespace
+from flask_restx import Api, Namespace
 
 from .resource import make_resource
 

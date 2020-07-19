@@ -2,7 +2,7 @@ from tranquilizer.resource import  make_resource, make_parser
 from tranquilizer.handler import ScriptHandler
 from tranquilizer.decorator import publish, tranquilize
 from tranquilizer.types import is_list_subclass
-from flask_restplus import Resource, Namespace
+from flask_restx import Resource, Namespace
 import typing
 import datetime
 import numpy

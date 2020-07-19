@@ -28,7 +28,7 @@ def order(cheese):
     return "I'm afraid we're fresh out of {}, Sir.".format(cheese)
 ```
 
-The REST API is served by [Flask](http://flask.pocoo.org/) and [Flask-RESTPlus](http://flask-restplus.readthedocs.io/en/stable/index.html)
+The REST API is served by [Flask](http://flask.pocoo.org/) and [Flask-RESTX](https://flask-restx.readthedocs.io/en/latest/)
 using the `tranquilizer` command.
 
 
@@ -96,7 +96,7 @@ provides specialized support for Lists, date/datetime, and files.
 |`typing.List[<type>]`| Converts *repeated* arguments to a list; each value is converted to `<type>`.|
 
 `List` arguments are constructed using the `action='append'` argument described in
-the [Flask RESTPlus documentation](http://flask-restplus.readthedocs.io/en/stable/parsing.html#multiple-values-lists).
+the [Flask RESTX documentation](https://flask-restx.readthedocs.io/en/stable/parsing.html#multiple-values-lists).
 Any valid type can be used in `List[]`.
 
 The following file-like types are handled by [werkzeug `FileStorage`](http://werkzeug.pocoo.org/docs/0.14/datastructures/#werkzeug.datastructures.FileStorage).

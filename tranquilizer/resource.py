@@ -1,6 +1,6 @@
-'''construct flask-restplus resources'''
+'''construct flask-restx resources'''
 from flask import jsonify
-from flask_restplus import Resource, reqparse
+from flask_restx import Resource, reqparse
 from collections import Mapping, Sequence
 from typing import List
 
