@@ -1,7 +1,7 @@
 '''construct flask-restx resources'''
 from flask import jsonify
 from flask_restx import Resource, reqparse
-from collections import Mapping, Sequence
+from collections.abc import Mapping, Sequence
 from typing import List
 
 from .types import is_container, type_mapper
