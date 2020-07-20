@@ -3,8 +3,8 @@ from dateutil.parser import parse
 from datetime import datetime, date
 from typing import TextIO, BinaryIO
 from werkzeug.datastructures import FileStorage
-from flask_restplus.reqparse import PY_TYPES
-from flask_restplus import fields
+from flask_restx.reqparse import PY_TYPES
+from flask_restx import fields
 import io
 
 def is_container(type_):
@@ -104,7 +104,7 @@ def list_factory(type_):
     items = getattr(type_, '__schema__', {}).get('type', PY_TYPES.get(type_, 'string'))
 
     class TypedList(Sequence):
-        # using append with flask-restplus
+        # using append with flask-restx
         # means that list is constructed later
         __schema__ = {'type': items}
         __description__ = 'List with values of type {}'.format(items)
