@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.5.0] - 2020-07-20
+### Changed
+- Migrated from flask-restplus to flask-restx
+- Relax werkzeug pin to allow version 1.x
+
 ## [0.4.1] - 2019-12-22
 ### Fixed
 - Fixed tranquilizer.__version__
