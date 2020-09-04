@@ -1,12 +1,16 @@
 from flask import Flask
 from werkzeug.middleware.proxy_fix import ProxyFix
 from flask_restx import Api, Namespace
+from flask_cors import CORS
+from os.path import join
 
 from .resource import make_resource
 
-def make_app(functions, name, prefix='/', max_content_length=None):
+def make_app(functions, name, prefix='/', max_content_length=None, origins=None):
     api = Api(title=name)
     app = Flask(__name__)
+    if origins is not None:
+        CORS(app, resources={r'{}'.format(join('/', prefix, '*')): {"origins": origins}})
     app.config['PREFERRED_URL_SCHEME'] = 'https'
     if max_content_length is not None:
         app.config['MAX_CONTENT_LENGTH'] = max_content_length

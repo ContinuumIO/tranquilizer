@@ -52,6 +52,18 @@ def test_url_prefix():
     args = cli().parse_args([fn, '--prefix', 'python'])
     assert args.prefix == 'python'
 
+def test_cors_arg():
+    here = dirname(__file__)
+    fn = join(here, 'cheese_shop.py')
+    args = cli().parse_args([fn, '--allow-origin', '*'])
+    assert args.allow_origin == ['*']
+
+def test_cors_args():
+    here = dirname(__file__)
+    fn = join(here, 'cheese_shop.py')
+    args = cli().parse_args([fn, '--allow-origin', 'localhost', '--allow-origin', '127.0.0.1'])
+    assert args.allow_origin == ['localhost', '127.0.0.1']
+
 def test_debug():
     here = dirname(__file__)
     fn = join(here, 'cheese_shop.py')

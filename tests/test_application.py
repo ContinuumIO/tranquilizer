@@ -42,3 +42,13 @@ def test_content_length():
 
     app = make_app(funcs, 'cheese', max_content_length=1024)
     assert app.config['MAX_CONTENT_LENGTH'] == 1024
+
+def test_cors_star():
+    here = dirname(__file__)
+    fn = join(here, 'cheese_shop.py')
+    script = ScriptHandler(fn)
+    script.parse()
+    funcs = script.tranquilized_functions
+
+    app = make_app(funcs, 'cheese', origins='*')
+    assert app.after_request_funcs

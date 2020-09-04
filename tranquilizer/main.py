@@ -1,6 +1,8 @@
 import sys
 from os.path import dirname, basename
 from argparse import ArgumentParser
+from os import environ
+import logging
 
 from .application import make_app
 from .handler import ScriptHandler, NotebookHandler
@@ -26,6 +28,9 @@ def cli():
                         help='IP address the application should listen on.')
     parser.add_argument('--prefix','--anaconda-project-url-prefix', action='store', default='',
                         help='Prefix in front of urls')
+    parser.add_argument('--allow-origin', action='append', type=str,
+                        metavar = 'HOST[:PORT]',
+                        help='Public hostnames which may connect to the endpoints')
 
     parser.add_argument('--debug', action='store_true', default=False,
                         help='Run API with debug output.')
@@ -65,14 +70,27 @@ def main(args):
     else:
         raise UnsupportedFileType('{} is not a script (.py) or notebook (.ipynb)'.format(args.filename))
 
+    allow_origin_env = environ.get('TRANQUILIZER_ALLOW_ORIGIN')
+    if allow_origin_env:
+        origins = allow_origin_env.split(',')
+    else:
+        origins = args.allow_origin
+    
     name = args.name if args.name else basename(args.filename)
     app = make_app(source.tranquilized_functions, name=name, prefix=args.prefix,
-                   max_content_length=args.max_content_length)
+                   max_content_length=args.max_content_length, origins=origins)
 
     return app
 
 def run():
     args = cli().parse_args()
     app = main(args)
+
+    if args.debug:
+        logging.basicConfig(level=logging.DEBUG)
+
+        if args.allow_origin or environ.get('TRANQUILIZER_ALLOW_ORIGIN'):
+            logging.getLogger('flask_cors').level = logging.DEBUG
+
     app.run(host=args.address, port=args.port,
             debug=args.debug)
