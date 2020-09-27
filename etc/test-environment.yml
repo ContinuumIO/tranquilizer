@@ -2,6 +2,10 @@ name: test-tranquilizer
 channels:
   - defaults
 dependencies:
+  - flask
+  - werkzeug
+  - python-dateutil
+  - flask-restx
   - pytest
   - pytest-cov
   - numpy
