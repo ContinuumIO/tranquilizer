@@ -2,7 +2,6 @@ name: test-tranquilizer
 channels:
   - defaults
 dependencies:
-  - local::tranquilizer
   - pytest
   - pytest-cov
   - numpy
