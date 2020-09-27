@@ -2,11 +2,14 @@
 import ast
 from runpy import run_path
 from unittest.mock import MagicMock
-from os.path import dirname, join, basename
+from os.path import dirname
 import tempfile
+from sys import platform
+
 
 def _is_tranquilized(decorator):
     return hasattr(decorator, 'id') and (decorator.id in ('tranquilize', 'publish'))
+
 
 def _is_decorated(item):
     if isinstance(item, ast.FunctionDef):
@@ -15,7 +18,7 @@ def _is_decorated(item):
 
 class BaseHandler(object):
 
-    def parse(self): # pragma no cover
+    def parse(self):  # pragma no cover
         raise NotImplementedError()
 
     @property
@@ -52,8 +55,8 @@ class NotebookHandler(BaseHandler):
 
         self.nodes = ast.parse(source, self.fn)
 
-        with tempfile.NamedTemporaryFile(mode='w', dir=dirname(self.fn), delete=True) as tmp:
+        delete = False if platform.startswith('win') else True
+        with tempfile.NamedTemporaryFile(mode='w', dir=dirname(self.fn), delete=delete) as tmp:
             tmp.write(source)
             tmp.flush()
-            self.module = run_path(tmp.name, init_globals={'get_ipython':MagicMock()})
-
+            self.module = run_path(tmp.name, init_globals={'get_ipython': MagicMock()})
