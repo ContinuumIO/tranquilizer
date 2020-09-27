@@ -26,11 +26,11 @@ jobs:
         run: |
           conda build conda.recipe --no-test
           mv $CONDA_PREFIX/conda-bld .
-      - name: Upload conda-bld directory
-        uses: actions/upload-artifact@v2
-        with:
-          name: package-${{ github.sha }}
-          path: ./conda-bld
+      # - name: Upload conda-bld directory
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: package-${{ github.sha }}
+      #     path: ./conda-bld
   test:
     name: Test (${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
@@ -41,11 +41,6 @@ jobs:
         python-version: ["3.5", "3.6", "3.7", "3.8"]
     steps:
       - uses: actions/checkout@v2
-      - name: Download the build artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: package-${{ github.sha }}
-          path: ./conda-bld
       - uses: conda-incubator/setup-miniconda@v1
         with:
           miniconda-version: "latest"
