@@ -1,0 +1,17 @@
+name: tranq-dev38
+channels:
+  - defaults
+dependencies:
+  - python=3.8
+  - flask
+  - werkzeug
+  - python-dateutil
+  - flask-restx
+  - pytest
+  - pytest-cov
+  - numpy
+  - pandas
+  - pillow
+  - nbconvert
+  - ipykernel
+  - requests

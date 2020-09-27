@@ -1,0 +1,6 @@
+name: build-tranq
+dependencies:
+  - python=3.8
+  - conda
+  - conda-build
+  - conda-verify

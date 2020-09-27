@@ -14,7 +14,10 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v1
         with:
           miniconda-version: "latest"
-          activate-environment: foo
+          activate-environment: build-tranq
+          environment-file: etc/build-environment.yml
+          python-version: 3.8
+          auto-activate-base: false
       - name: Bash
         shell: bash -l {0}
         run: |
