@@ -1,4 +1,4 @@
-name: tranq-dev38
+name: tranquilizer-dev
 channels:
   - defaults
 dependencies:

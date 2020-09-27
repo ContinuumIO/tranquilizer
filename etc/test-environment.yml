@@ -1,4 +1,4 @@
-name: tranq-test
+name: test-tranquilizer
 channels:
   - defaults
 dependencies:

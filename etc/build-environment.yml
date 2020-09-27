@@ -1,4 +1,4 @@
-name: build-tranq
+name: build-tranquilizer
 dependencies:
   - conda
   - conda-build
