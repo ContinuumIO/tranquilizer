@@ -6,6 +6,7 @@ dependencies:
   - werkzeug
   - python-dateutil
   - flask-restx
+  - flask-cors
   - pytest
   - pytest-cov
   - numpy
