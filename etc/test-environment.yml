@@ -2,6 +2,7 @@ name: tranq-test
 channels:
   - defaults
 dependencies:
+  - local::tranquilizer
   - pytest
   - pytest-cov
   - numpy

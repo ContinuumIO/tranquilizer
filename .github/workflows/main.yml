@@ -12,6 +12,8 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: conda-incubator/setup-miniconda@v1
         with:
           miniconda-version: "latest"
@@ -19,7 +21,7 @@ jobs:
           environment-file: etc/build-environment.yml
           python-version: 3.8
           auto-activate-base: false
-      - name: Build
+      - name: Conda Build
         shell: bash -l {0}
         run: |
           conda build conda.recipe --no-test
