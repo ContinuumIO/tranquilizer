@@ -1,0 +1,22 @@
+name: Build and test
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  package:
+    name: Info and list
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: conda-incubator/setup-miniconda@v1
+        with:
+          miniconda-version: "latest"
+          activate-environment: foo
+      - name: Bash
+        shell: bash -l {0}
+        run: |
+          conda info
+          conda list
