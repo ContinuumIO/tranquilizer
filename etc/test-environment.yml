@@ -1,0 +1,12 @@
+name: tranq-test
+channels:
+  - defaults
+dependencies:
+  - pytest
+  - pytest-cov
+  - numpy
+  - pandas
+  - pillow
+  - nbconvert
+  - ipykernel
+  - requests

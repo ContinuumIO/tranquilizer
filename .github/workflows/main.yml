@@ -8,7 +8,7 @@ on:
       - master
 jobs:
   package:
-    name: Info and list
+    name: Build package
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v2
@@ -19,8 +19,7 @@ jobs:
           environment-file: etc/build-environment.yml
           python-version: 3.8
           auto-activate-base: false
-      - name: Bash
+      - name: Build
         shell: bash -l {0}
         run: |
-          conda info
-          conda list
+          conda build conda.recipe --no-test
