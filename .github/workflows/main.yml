@@ -25,3 +25,8 @@ jobs:
         shell: bash -l {0}
         run: |
           conda build conda.recipe --no-test
+      - name: Upload conda-bld directory
+        uses: actions/upload-artifact@v2
+        with:
+          name: package-${{ github.sha }}
+          path: $CONDA_PREFIX/conda-bld
