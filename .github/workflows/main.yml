@@ -51,3 +51,7 @@ jobs:
         shell: bash -l {0}
         run: |
           py.test -xv
+      - name: Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./cov.xml
