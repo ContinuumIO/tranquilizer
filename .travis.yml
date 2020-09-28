@@ -23,7 +23,7 @@ install:
   - conda config --append channels conda-forge
   - conda activate test
   - conda build conda.recipe --no-test
-  - conda install -n test --use-local tranquilizer numpy pandas pillow nbconvert ipython
+  - conda install -n test --use-local tranquilizer numpy pandas pillow nbconvert ipython parso<0.8
 script:
   - conda activate test
   - pytest -v --color=yes --cov=tranquilizer tests
