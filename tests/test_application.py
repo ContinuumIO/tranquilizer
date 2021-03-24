@@ -3,6 +3,7 @@ from tranquilizer.handler import ScriptHandler
 from werkzeug.middleware.proxy_fix import ProxyFix
 from os.path import dirname, join
 
+
 def test_app_function():
     here = dirname(__file__)
     fn = join(here, 'cheese_shop.py')
@@ -13,7 +14,7 @@ def test_app_function():
     app = make_app(funcs, 'cheese')
     assert len(app.blueprints) == 1
 
-def test_app_function():
+def test_two_app_functions():
     here = dirname(__file__)
     fn = join(here, 'two_funcs.py')
     script = ScriptHandler(fn)
