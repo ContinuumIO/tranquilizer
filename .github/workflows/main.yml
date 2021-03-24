@@ -1,0 +1,58 @@
+name: Build and test
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  package:
+    name: Build package
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniconda-version: "latest"
+          activate-environment: build-tranquilizer
+          environment-file: etc/build-environment.yml
+          python-version: 3.8
+          auto-activate-base: false
+      - name: Conda Build
+        shell: bash -l {0}
+        run: |
+          conda build conda.recipe --no-test
+          mv $CONDA_PREFIX/conda-bld .
+      # - name: Upload conda-bld directory
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: package-${{ github.sha }}
+      #     path: ./conda-bld
+  test:
+    name: Test (${{ matrix.python-version }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        python-version: ["3.5", "3.6", "3.7", "3.8"]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniconda-version: "latest"
+          python-version: ${{ matrix.python-version }}
+          activate-environment: test-tranquilizer
+          environment-file: etc/test-environment.yml
+      - name: py.test
+        shell: bash -l {0}
+        run: |
+          py.test -xv
+      - name: Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./cov.xml
+          env_vars: OS,PYTHON

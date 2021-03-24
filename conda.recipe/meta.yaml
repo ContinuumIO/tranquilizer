@@ -22,6 +22,7 @@ requirements:
    - werkzeug >=0.15, <2.0
    - python-dateutil
    - flask-restx
+   - flask-cors
   build:
    - python >=3.5, <3.9
    - setuptools

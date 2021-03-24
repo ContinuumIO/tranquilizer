@@ -1,0 +1,17 @@
+name: test-tranquilizer
+channels:
+  - defaults
+dependencies:
+  - flask
+  - werkzeug
+  - python-dateutil
+  - flask-restx
+  - flask-cors
+  - pytest
+  - pytest-cov
+  - numpy
+  - pandas
+  - pillow
+  - nbconvert
+  - ipykernel
+  - requests

@@ -1,0 +1,5 @@
+name: build-tranquilizer
+dependencies:
+  - conda
+  - conda-build
+  - conda-verify
