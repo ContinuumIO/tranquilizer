@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0] - 2021-06-07
+### Added
+- CORS support using `--allow-origin HOST:PORT` or `$TRANQUILIZER_ALLOW_ORIGIN`
+
+### Fixed
+- Example in README
+
 ## [0.5.0] - 2020-07-20
 ### Changed
 - Migrated from flask-restplus to flask-restx
