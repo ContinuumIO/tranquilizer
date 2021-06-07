@@ -57,8 +57,8 @@ In [1]: import requests
 
 In [2]: response = requests.get('http://localhost:8086/order', params={'cheese':'Red Leicester'})
 
-In [3]: response.json()
-Out[3]: {'response': "I'm afraid we're fresh out of Red Leicester, Sir."}
+In [3]: response.text
+Out[3]: '"I\'m afraid we\'re fresh out of cheddar, Sir."\n'
 ```
 
 The *tranquilized* API is documented with [Swagger](https://swagger.io/tools/open-source/) and is accessible
