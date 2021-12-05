@@ -16,6 +16,7 @@ def test_attributes():
     assert hasattr(decorated, '_spec')
     assert hasattr(decorated, '_method')
     assert hasattr(decorated, '_methods')
+    assert hasattr(decorated, '_protected')
     assert decorated._methods is None
 
 
@@ -28,6 +29,7 @@ def test_publish_attributes():
     assert hasattr(decorated, '_spec')
     assert hasattr(decorated, '_method')
     assert hasattr(decorated, '_methods')
+    assert hasattr(decorated, '_protected')
     assert decorated._method is None
 
 
@@ -79,6 +81,29 @@ def test_methods():
 
     post_get = publish(methods=['GET', 'PosT'])(_funcpg)
     assert post_get._methods == ['get', 'post']
+
+
+def test_protected():
+    def _func():
+        return 0
+
+    protected = tranquilize(protected=True)(_func)
+    assert protected._protected == True
+
+    unprotected = tranquilize(protected=False)(_func)
+    assert protected._protected == False
+
+    unspecified = tranquilize()(_func)
+    assert protected._protected is None
+
+    protected_p = publish(protected=True)(_func)
+    assert protected_p._protected == True
+
+    unprotected_p = publish(protected=False)(_func)
+    assert protected_p._protected == False
+
+    unspecified_p = publish()(_func)
+    assert protected_p._protected is None
 
 
 def test_prepare():

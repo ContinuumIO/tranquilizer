@@ -76,3 +76,9 @@ def test_version():
     with pytest.raises(SystemExit):
         args = cli().parse_args([fn, '--version'])
         assert args.version == 'tranquilizer {}'.format(__version__)
+
+def test_secret_key():
+    here = dirname(__file__)
+    fn = join(here, 'protected.py')
+    args = cli().parse_args([fn, '--secret-key', 'tranquilizer'])
+    assert args.secret_key == 'tranquilizer'

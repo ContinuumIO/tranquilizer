@@ -2,31 +2,63 @@ from tranquilizer.resource import  make_resource, make_parser
 from tranquilizer.handler import ScriptHandler
 from tranquilizer.decorator import publish, tranquilize
 from tranquilizer.types import is_list_subclass
-from flask_restx import Resource, Namespace
+from flask_restx import Resource, Namespace, resource
 import typing
 import datetime
 import numpy
 import PIL.Image
 from os.path import dirname, join
+import pytest
 
-
-def test_make_resource_method():
+@pytest.fixture
+def tranquilized_funcs():
     here = dirname(__file__)
     fn = join(here, 'cheese_shop.py')
     script = ScriptHandler(fn)
+    script.parse()
     funcs = script.tranquilized_functions
-    ns = Namespace('/', description='Testing Tranquilized API')
-    resource = make_resource(funcs[0], ns)
-    assert issubclass(resource, Resource)
-    assert hasattr(resource, 'get')
 
-def test_make_resource_methods():
+    return funcs
+
+@pytest.fixture
+def published_funcs():
     here = dirname(__file__)
     fn = join(here, 'cheese_shop_publish.py')
     script = ScriptHandler(fn)
+    script.parse()
     funcs = script.tranquilized_functions
+
+    return funcs
+
+@pytest.fixture
+def error_funcs():
+    here = dirname(__file__)
+    fn = join(here, 'integer_error.py')
+    script = ScriptHandler(fn)
+    script.parse()
+    funcs = script.tranquilized_functions
+
+    return funcs
+
+@pytest.fixture
+def protected_funcs():
+    here = dirname(__file__)
+    fn = join(here, 'protected.py')
+    script = ScriptHandler(fn)
+    script.parse()
+    funcs = script.tranquilized_functions
+
+    return funcs
+
+def test_make_resource_method(tranquilized_funcs):
     ns = Namespace('/', description='Testing Tranquilized API')
-    resource = make_resource(funcs[0], ns)
+    resource = make_resource(tranquilized_funcs[0], ns)
+    assert issubclass(resource, Resource)
+    assert hasattr(resource, 'get')
+
+def test_make_resource_methods(published_funcs):
+    ns = Namespace('/', description='Testing Publisher API')
+    resource = make_resource(published_funcs[0], ns)
     assert issubclass(resource, Resource)
     assert hasattr(resource, 'get')
     assert hasattr(resource, 'post')
@@ -139,12 +171,25 @@ def test_parser_docs():
     
     assert parser.args[0].help == 'a string'
 
-def test_make_resource_docs():
-    here = dirname(__file__)
-    fn = join(here, 'integer_error.py')
-    script = ScriptHandler(fn)
-    funcs = script.tranquilized_functions
+def test_make_resource_docs(error_funcs):
     ns = Namespace('/', description='Testing Tranquilized API')
-    resource = make_resource(funcs[0], ns)
+    resource = make_resource(error_funcs[0], ns)
     assert resource.get.__doc__ == 'Make an integer\n\n    '
     assert resource.get.__apidoc__['responses'] == {500: 'ValueError:not an integer'}
+
+
+def test_unprotected_funcs(tranquilized_funcs):
+    ns = Namespace('/', description='Testing protected API')
+    resource = make_resource(tranquilized_funcs[0], ns, protected=False)
+    assert resource.get.__apidoc__['security'] == None
+
+def test_protected_funcs(protected_funcs):
+    ns = Namespace('/', description='Testing protected API')
+    resource = make_resource(protected_funcs[0], ns, protected=protected_funcs[0]._protected)
+    assert resource.get.__apidoc__['security'] == 'bearer_token'
+
+    resource = make_resource(protected_funcs[1], ns, protected=protected_funcs[1]._protected)
+    assert resource.get.__apidoc__['security'] == None
+
+    resource = make_resource(protected_funcs[2], ns, protected=protected_funcs[2]._protected)
+    assert resource.get.__apidoc__['security'] == None
