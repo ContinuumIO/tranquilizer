@@ -4,14 +4,13 @@ from flask_restx import Api, Namespace
 from flask_cors import CORS
 from os.path import join
 
-from flask_jwt_extended import create_access_token
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 
 from .resource import make_resource
 
-def make_app(functions, name, prefix='/', max_content_length=None, origins=None, jwt_secret_key=None):
-    if jwt_secret_key:
+def make_app(functions, name, prefix='/', max_content_length=None, origins=None, secret_key=None):
+    if secret_key:
         authorizations = {
             'bearer_token': {
                 'type': 'apiKey',
@@ -25,8 +24,8 @@ def make_app(functions, name, prefix='/', max_content_length=None, origins=None,
     api = Api(title=name, authorizations=authorizations)
     app = Flask(__name__)
 
-    if jwt_secret_key is not None:
-        app.config['JWT_SECRET_KEY'] = jwt_secret_key
+    if secret_key is not None:
+        app.config['JWT_SECRET_KEY'] = secret_key
         jwt = JWTManager(app)
 
     if origins is not None:
@@ -48,18 +47,19 @@ def make_app(functions, name, prefix='/', max_content_length=None, origins=None,
     ns = Namespace(prefix, description='Tranquilized API')
 
     for f in functions:
-        protected = False if jwt_secret_key is None else True
+        if f._protected is None:
+            protected = False if secret_key is None else True
+        elif f._protected and secret_key is None:
+            raise RuntimeError(f'The function "{f.__name__}()" has been tranquilized with protected=True but the '
+                               f'--secret-key <secret-key> command-line argument was not supplied when running '
+                               f'tranquilizer.')
+        else:
+            protected = f._protected
         resource = make_resource(f, ns, protected=protected)
         ns.add_resource(resource, '/{}'.format(f._spec['name']))
         api.add_namespace(ns)
 
     api.init_app(app)
-
-    if jwt_secret_key:
-        with app.app_context():
-            token = create_access_token(identity=f'{name} API user')
-        print(token)
-
 
     return app
 

@@ -3,6 +3,7 @@ from os.path import dirname, basename
 from argparse import ArgumentParser
 from os import environ
 import logging
+from flask_jwt_extended import create_access_token
 
 from .application import make_app
 from .handler import ScriptHandler, NotebookHandler
@@ -31,8 +32,8 @@ def cli():
     parser.add_argument('--allow-origin', action='append', type=str,
                         metavar = 'HOST[:PORT]',
                         help='Public hostnames which may connect to the endpoints')
-    parser.add_argument('--jwt-secret-key', action='store', type=str, default=None,
-                        help='Enable JWT authentication with the supplied key')
+    parser.add_argument('--secret-key', action='store', type=str, default=None,
+                        help='Enable token authentication with the supplied key')
 
     parser.add_argument('--debug', action='store_true', default=False,
                         help='Run API with debug output.')
@@ -81,7 +82,7 @@ def main(args):
     name = args.name if args.name else basename(args.filename)
     app = make_app(source.tranquilized_functions, name=name, prefix=args.prefix,
                    max_content_length=args.max_content_length, origins=origins,
-                   jwt_secret_key=args.jwt_secret_key)
+                   secret_key=args.secret_key)
 
     return app
 
@@ -94,6 +95,15 @@ def run():
 
         if args.allow_origin or environ.get('TRANQUILIZER_ALLOW_ORIGIN'):
             logging.getLogger('flask_cors').level = logging.DEBUG
+
+    if args.secret_key:
+        with app.app_context():
+            token = create_access_token(identity='Tranquilized API user', expires_delta=False)
+        print('-- This API secured with JWT using the HS256 algorithm. The following token can be used as an '
+              f' Authorization Bearer token in the request header.')
+        print(f'\n{token}\n')
+        print('-- You can create more bearer tokens online at https://jwt.io using the secret-key you supplied '
+              'on the command line.')
 
     app.run(host=args.address, port=args.port,
             debug=args.debug)
