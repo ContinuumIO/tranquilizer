@@ -207,5 +207,5 @@ def test_prepare_error_noerror():
 
         error_docs, remainder = _prepare_error_docs(doc)
         
-        assert error_docs is None
+        assert error_docs == {}
         assert remainder == doc
