@@ -3,6 +3,7 @@ from flask import jsonify
 from flask_restx import Resource, reqparse
 from collections.abc import Mapping, Sequence
 from typing import List
+from flask_jwt_extended import jwt_required
 
 from .types import is_container, type_mapper
 
@@ -60,25 +61,25 @@ def make_parser(func_spec, location='args', compat=False):
     return parser
 
 
-def make_resource(func, api):
+def make_resource(func, api, protected=False):
     if func._methods:
-        return _make_resources(func, api)
+        return _make_resources(func, api, protected=protected)
     else:
-        return _make_resource(func, api, func._method)
+        return _make_resource(func, api, func._method, protected=protected)
 
 
-def _make_resources(func, api):
+def _make_resources(func, api, protected=False):
     '''Provide compatibility with web-publisher'''
     resources = {}
     for m in func._methods:
-        resources[m] = getattr(_make_resource(func, api, m), m)
+        resources[m] = getattr(_make_resource(func, api, m, protected), m)
 
     Tranquilized = type('Tranquilized', (Resource,), resources)
 
     return Tranquilized
 
 
-def _make_resource(func, api, method):
+def _make_resource(func, api, method, protected=False):
     location = 'form' if method in ['put','post'] else 'args'
     compat = True if (func._methods is not None) else False
     parser = make_parser(func._spec, location=location, compat=compat)
@@ -90,8 +91,11 @@ def _make_resource(func, api, method):
         return jsonify(output)
 
     error_docs = func._spec['error_docs']
-    if error_docs:
-        _method = api.doc(responses=error_docs)(_method)
+    security = 'bearer_token' if protected else None
+    _method = api.doc(responses=error_docs, security=security)(_method)
+
+    if protected:
+        _method = jwt_required()(_method)
 
     _method.__doc__ = func._spec['docstring']
 

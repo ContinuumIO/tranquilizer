@@ -23,6 +23,7 @@ requirements:
    - python-dateutil
    - flask-restx
    - flask-cors
+   - flask-jwt-extended
   build:
    - python >=3.5, <3.10
    - setuptools

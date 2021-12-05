@@ -9,7 +9,8 @@ install_requires=[
     'werkzeug>=0.15,<2.0',
     'flask-restx',
     'flask-cors',
-    'python-dateutil'
+    'python-dateutil',
+    'flask-jwt-extended'
 ]
 
 extras_require={

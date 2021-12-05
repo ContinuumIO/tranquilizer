@@ -47,7 +47,7 @@ def _prepare_error_docs(docstring):
         responses = {500:messages}
         return responses, remainder
 
-    return None, remainder
+    return {}, remainder
 
 def _prepare(fn):
     """Inspects a function and return a function spec dict

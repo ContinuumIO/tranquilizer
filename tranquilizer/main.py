@@ -31,6 +31,8 @@ def cli():
     parser.add_argument('--allow-origin', action='append', type=str,
                         metavar = 'HOST[:PORT]',
                         help='Public hostnames which may connect to the endpoints')
+    parser.add_argument('--jwt-secret-key', action='store', type=str, default=None,
+                        help='Enable JWT authentication with the supplied key')
 
     parser.add_argument('--debug', action='store_true', default=False,
                         help='Run API with debug output.')
@@ -75,10 +77,11 @@ def main(args):
         origins = allow_origin_env.split(',')
     else:
         origins = args.allow_origin
-    
+
     name = args.name if args.name else basename(args.filename)
     app = make_app(source.tranquilized_functions, name=name, prefix=args.prefix,
-                   max_content_length=args.max_content_length, origins=origins)
+                   max_content_length=args.max_content_length, origins=origins,
+                   jwt_secret_key=args.jwt_secret_key)
 
     return app
 
