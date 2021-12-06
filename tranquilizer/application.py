@@ -30,7 +30,7 @@ def make_app(functions, name, prefix='/', max_content_length=None, origins=None,
         jwt = JWTManager(app)
         @jwt.unauthorized_loader
         def unathenticated(msg):
-            return jsonify('Authentication is required'), 401
+            return {'message': msg}, 401
 
     if origins is not None:
         CORS(app, resources={r'{}'.format(join('/', prefix, '*')): {"origins": origins}})
@@ -39,7 +39,6 @@ def make_app(functions, name, prefix='/', max_content_length=None, origins=None,
     if max_content_length is not None:
         app.config['MAX_CONTENT_LENGTH'] = max_content_length
     app.wsgi_app = ProxyFix(app.wsgi_app,
-                            # num_proxies=None,
                             x_for=1, x_proto=1,
                             x_host=1, x_port=1,
                             x_prefix=1)
