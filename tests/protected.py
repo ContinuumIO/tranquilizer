@@ -1,6 +1,6 @@
 from tranquilizer import tranquilize
 
-@tranquilize(protected=True)
+@tranquilize(requires_authentication=True)
 def order(cheese):
     '''I'd like to buy some cheese!
 
@@ -12,6 +12,6 @@ def order(cheese):
 def unspecified():
     return "Unspecified authorization"
 
-@tranquilize(protected=False)
+@tranquilize(requires_authentication=False)
 def no_auth():
     return "Disabled authorization"

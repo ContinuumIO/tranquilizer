@@ -16,7 +16,7 @@ def test_attributes():
     assert hasattr(decorated, '_spec')
     assert hasattr(decorated, '_method')
     assert hasattr(decorated, '_methods')
-    assert hasattr(decorated, '_protected')
+    assert hasattr(decorated, '_requires_authentication')
     assert decorated._methods is None
 
 
@@ -29,7 +29,7 @@ def test_publish_attributes():
     assert hasattr(decorated, '_spec')
     assert hasattr(decorated, '_method')
     assert hasattr(decorated, '_methods')
-    assert hasattr(decorated, '_protected')
+    assert hasattr(decorated, '_requires_authentication')
     assert decorated._method is None
 
 
@@ -87,23 +87,23 @@ def test_protected():
     def _func():
         return 0
 
-    protected = tranquilize(protected=True)(_func)
-    assert protected._protected == True
+    protected = tranquilize(requires_authentication=True)(_func)
+    assert protected._requires_authentication == True
 
-    unprotected = tranquilize(protected=False)(_func)
-    assert protected._protected == False
+    unprotected = tranquilize(requires_authentication=False)(_func)
+    assert protected._requires_authentication == False
 
     unspecified = tranquilize()(_func)
-    assert protected._protected is None
+    assert protected._requires_authentication is None
 
-    protected_p = publish(protected=True)(_func)
-    assert protected_p._protected == True
+    protected_p = publish(requires_authentication=True)(_func)
+    assert protected_p._requires_authentication == True
 
-    unprotected_p = publish(protected=False)(_func)
-    assert protected_p._protected == False
+    unprotected_p = publish(requires_authentication=False)(_func)
+    assert protected_p._requires_authentication == False
 
     unspecified_p = publish()(_func)
-    assert protected_p._protected is None
+    assert protected_p._requires_authentication is None
 
 
 def test_prepare():

@@ -50,15 +50,15 @@ def make_app(functions, name, prefix='/', max_content_length=None, origins=None,
     ns = Namespace(prefix, description='Tranquilized API')
 
     for f in functions:
-        if f._protected is None:
-            protected = False if secret_key is None else True
-        elif f._protected and secret_key is None:
-            raise RuntimeError(f'The function "{f.__name__}()" has been tranquilized with protected=True but the '
-                               f'--secret-key <secret-key> command-line argument was not supplied when running '
-                               f'tranquilizer.')
+        if f._requires_authentication is None:
+            requires_authentication = False if secret_key is None else True
+        elif f._requires_authentication and secret_key is None:
+            raise RuntimeError(f'The function "{f.__name__}()" has been tranquilized with requires_authentication=True '
+                               f'but the --secret-key <secret-key> command-line argument was not supplied when '
+                               f'running tranquilizer.')
         else:
-            protected = f._protected
-        resource = make_resource(f, ns, protected=protected)
+            requires_authentication = f._requires_authentication
+        resource = make_resource(f, ns, requires_authentication=requires_authentication)
         ns.add_resource(resource, '/{}'.format(f._spec['name']))
         api.add_namespace(ns)
 

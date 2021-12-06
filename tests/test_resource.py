@@ -180,16 +180,16 @@ def test_make_resource_docs(error_funcs):
 
 def test_unprotected_funcs(tranquilized_funcs):
     ns = Namespace('/', description='Testing protected API')
-    resource = make_resource(tranquilized_funcs[0], ns, protected=False)
+    resource = make_resource(tranquilized_funcs[0], ns, requires_authentication=False)
     assert resource.get.__apidoc__['security'] == None
 
 def test_protected_funcs(protected_funcs):
     ns = Namespace('/', description='Testing protected API')
-    resource = make_resource(protected_funcs[0], ns, protected=protected_funcs[0]._protected)
+    resource = make_resource(protected_funcs[0], ns, requires_authentication=protected_funcs[0]._requires_authentication)
     assert resource.get.__apidoc__['security'] == 'bearer_token'
 
-    resource = make_resource(protected_funcs[1], ns, protected=protected_funcs[1]._protected)
+    resource = make_resource(protected_funcs[1], ns, requires_authentication=protected_funcs[1]._requires_authentication)
     assert resource.get.__apidoc__['security'] == None
 
-    resource = make_resource(protected_funcs[2], ns, protected=protected_funcs[2]._protected)
+    resource = make_resource(protected_funcs[2], ns, requires_authentication=protected_funcs[2]._requires_authentication)
     assert resource.get.__apidoc__['security'] == None

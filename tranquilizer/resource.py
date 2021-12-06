@@ -61,25 +61,25 @@ def make_parser(func_spec, location='args', compat=False):
     return parser
 
 
-def make_resource(func, api, protected=False):
+def make_resource(func, api, requires_authentication=False):
     if func._methods:
-        return _make_resources(func, api, protected=protected)
+        return _make_resources(func, api, requires_authentication=requires_authentication)
     else:
-        return _make_resource(func, api, func._method, protected=protected)
+        return _make_resource(func, api, func._method, requires_authentication=requires_authentication)
 
 
-def _make_resources(func, api, protected=False):
+def _make_resources(func, api, requires_authentication=False):
     '''Provide compatibility with web-publisher'''
     resources = {}
     for m in func._methods:
-        resources[m] = getattr(_make_resource(func, api, m, protected), m)
+        resources[m] = getattr(_make_resource(func, api, m, requires_authentication), m)
 
     Tranquilized = type('Tranquilized', (Resource,), resources)
 
     return Tranquilized
 
 
-def _make_resource(func, api, method, protected=False):
+def _make_resource(func, api, method, requires_authentication=False):
     location = 'form' if method in ['put','post'] else 'args'
     compat = True if (func._methods is not None) else False
     parser = make_parser(func._spec, location=location, compat=compat)
@@ -91,10 +91,10 @@ def _make_resource(func, api, method, protected=False):
         return jsonify(output)
 
     error_docs = func._spec['error_docs']
-    security = 'bearer_token' if protected else None
+    security = 'bearer_token' if requires_authentication else None
     _method = api.doc(responses=error_docs, security=security)(_method)
 
-    if protected:
+    if requires_authentication:
         _method = jwt_required()(_method)
 
     _method.__doc__ = func._spec['docstring']
