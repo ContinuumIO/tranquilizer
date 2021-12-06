@@ -53,9 +53,9 @@ def make_app(functions, name, prefix='/', max_content_length=None, origins=None,
         if f._requires_authentication is None:
             requires_authentication = False if secret_key is None else True
         elif f._requires_authentication and secret_key is None:
-            raise RuntimeError(f'The function "{f.__name__}()" has been tranquilized with requires_authentication=True '
-                               f'but the --secret-key <secret-key> command-line argument was not supplied when '
-                               f'running tranquilizer.')
+            raise RuntimeError('The function "{name}()" has been tranquilized with requires_authentication=True '
+                               'but the --secret-key <secret-key> command-line argument was not supplied when '
+                               'running tranquilizer.'.format(name=f.__name__))
         else:
             requires_authentication = f._requires_authentication
         resource = make_resource(f, ns, requires_authentication=requires_authentication)

@@ -100,8 +100,10 @@ def run():
         with app.app_context():
             token = create_access_token(identity='Tranquilized API user', expires_delta=False)
         print('-- This API secured with JWT using the HS256 algorithm. The following token can be used as an '
-              f' Authorization Bearer token in the request header.')
-        print(f'\n{token}\n')
+              ' Authorization Bearer token in the request header.')
+        print()
+        print(token)
+        print()
         print('-- You can create more bearer tokens online at https://jwt.io using the secret-key you supplied '
               'on the command line.')
 
