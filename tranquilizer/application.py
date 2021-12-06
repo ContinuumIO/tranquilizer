@@ -1,10 +1,9 @@
-from flask import Flask
+from flask import Flask, jsonify
 from werkzeug.middleware.proxy_fix import ProxyFix
 from flask_restx import Api, Namespace
 from flask_cors import CORS
 from os.path import join
 
-from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 
 from .resource import make_resource
@@ -26,7 +25,12 @@ def make_app(functions, name, prefix='/', max_content_length=None, origins=None,
 
     if secret_key is not None:
         app.config['JWT_SECRET_KEY'] = secret_key
+        app.config['JWT_TOKEN_LOCATION'] = ['headers']
+        app.config['PROPAGATE_EXCEPTIONS'] = True
         jwt = JWTManager(app)
+        @jwt.unauthorized_loader
+        def unathenticated(msg):
+            return jsonify('Authentication is required'), 401
 
     if origins is not None:
         CORS(app, resources={r'{}'.format(join('/', prefix, '*')): {"origins": origins}})
