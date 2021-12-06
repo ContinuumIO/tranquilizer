@@ -165,3 +165,84 @@ Out[4]:
 
 In [5]:
 ```
+
+## Securing the API with a bearer token
+
+If you need to secure your tranquilized API with an Authorization Bearer token use the `--secret-key` command-line
+flag. The supplied secret key is used to decrypt JWT tokens. When the tranquilizer server starts a bearer token
+is printed to standard out that can be used to access the API. Here's an example of the output.
+
+NOTE: It is important that you keep your secret key safe and not share it as it is used to sign and verify bearer
+tokens, not to access the API.
+
+```
+> tranquilizer --secret-key <secret-key> cheese_shop.ipynb
+-- This API secured with JWT using the HS256 algorithm. The following token can be used as an  Authorization Bearer token in the request header.
+
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzODc0MzkxNiwianRpIjoiNGY0YTdiZWYtMWJiZi00ZGUwLWI0MDMtOTVhNzY2Y2IxNWUyIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IlRyYW5xdWlsaXplZCBBUEkgdXNlciIsIm5iZiI6MTYzODc0MzkxNn0.pWoKvH_N9abFUYLzbzc02ewnPGPbvTjiFAVI3GlVltw
+
+-- You can create more bearer tokens online at https://jwt.io using the secret-key you supplied on the command line.
+ * Serving Flask app "tranquilizer.application" (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+ * Running on http://0.0.0.0:8086/ (Press CTRL+C to quit)
+```
+
+A user can then utilize the supplied token in requests to the API, for example with curl
+
+```
+> TOKEN='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTYzODc0MzkxNiwianRpIjoiNGY0YTdiZWYtMWJiZi00ZGUwLWI0MDMtOTVhNzY2Y2IxNWUyIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IlRyYW5xdWlsaXplZCBBUEkgdXNlciIsIm5iZiI6MTYzODc0MzkxNn0.pWoKvH_N9abFUYLzbzc02ewnPGPbvTjiFAVI3GlVltw'
+> curl -H 'Authorization: Bearer ${TOKEN}' http://localhost:8086/order?cheese=cheddar
+"I'm afraid we're fresh out of cheddar, Sir."
+```
+
+If the authorization header is not included in the request a 401 error is returned.
+
+```
+> curl -i http://localhost:8086/order?cheese=cheddar
+HTTP/1.0 401 UNAUTHORIZED
+Content-Type: application/json
+Content-Length: 43
+Server: Werkzeug/1.0.1 Python/3.7.9
+Date: Mon, 06 Dec 2021 15:46:19 GMT
+
+{"message":"Missing Authorization Header"}
+```
+
+### Choosing functions to protect with authentication
+
+By default all `@tranquilize()` decorated functions will require authentication when using the `--secret-key` command
+line argument. To disable authentication for specific functions use the `requires_authentication=False` keyword
+argument. For example in the tranquilized functions below the `cheeses()` function does not require the
+`Authorization: Bearer ${TOKEN}` header, but the `order()` function does require the header.
+
+When `requires_authentication=None` or is not included in the decorator call the function will require authentication
+when using the `--secret-key` CLI argument. If `requires_authentication=True` is used but tranquilizer is not started
+with the `--secret-key` argument a `RuntimeError` exception is raised.
+
+
+```python
+from tranquilizer import tranquilize
+
+@tranquilize()
+def cheeses(method='get', requires_authentication=False):
+    '''List the available cheeses'''
+
+    return ['Red Leicester', 'Tilsit', 'Caerphilly', 'Bel Paese', 'Venezuelan Beaver Cheese']
+
+@tranquilize(method='post')
+def order(cheese):
+    '''I'd like to buy some cheese!'''
+    return "I'm afraid we're fresh out of {}, Sir.".format(cheese)
+```
+
+### Swagger
+
+When using `--set-secret` and the optional `requires_authentication` keyword argument the Swagger docs
+are still accessible but in order to *try out* an endpoint that requires authentication you must first
+click the `Authorize` button at the top right. In the dialog box include the bearer token prepended by `Bearer`
+as shown in the screenshot. 
+
+![](img/swagger_authorize.png)
