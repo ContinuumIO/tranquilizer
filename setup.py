@@ -10,7 +10,7 @@ install_requires=[
     'flask-restx',
     'flask-cors',
     'python-dateutil',
-    'flask-jwt-extended'
+    'flask-jwt-extended>=4'
 ]
 
 extras_require={

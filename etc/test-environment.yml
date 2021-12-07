@@ -3,7 +3,7 @@ channels:
   - defaults
 dependencies:
   - flask
-  - werkzeug
+  - werkzeug<2
   - python-dateutil
   - flask-restx
   - flask-cors
@@ -15,4 +15,4 @@ dependencies:
   - nbconvert
   - ipykernel
   - requests
-  - flask-jwt-extended
+  - flask-jwt-extended>=4

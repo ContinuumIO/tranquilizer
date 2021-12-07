@@ -15,4 +15,6 @@ dependencies:
   - nbconvert
   - ipykernel
   - requests
-  - flask-jwt-extended
+  - flask-jwt-extended>=4
+  - werkzeug<2
+  - flask-cors
