@@ -14,7 +14,7 @@ The package is available for all Mac, Linux, and Windows on my conda channel. Py
 
 Tranquilizer can be used with either Jupyter Notebooks (`.ipynb`) or Python script files (`.py`).
 
-The decorated function below will be served as an end point called `cheese` with the GET method. The
+The decorated function below will be served as an end point called `order` with the GET method. The
 function must return a JSON serializable object.
 
 See the [complete description of `@tranquilize()`](#tranquilize-decorator) below.
@@ -28,7 +28,7 @@ def order(cheese):
     return "I'm afraid we're fresh out of {}, Sir.".format(cheese)
 ```
 
-The REST API is served by [Flask](http://flask.pocoo.org/) and [Flask-RESTX](https://flask-restx.readthedocs.io/en/latest/)
+The REST API is served by [Flask](https://flask.palletsprojects.com) and [Flask-RESTX](https://flask-restx.readthedocs.io/en/latest/)
 using the `tranquilizer` command.
 
 
@@ -64,7 +64,7 @@ Out[3]: '"I\'m afraid we\'re fresh out of cheddar, Sir."\n'
 The *tranquilized* API is documented with [Swagger](https://swagger.io/tools/open-source/) and is accessible
 in your web browser at [http://localhost:8086](http://localhost:8086).
 
-![](img/swagger.png)
+![](https://raw.githubusercontent.com/ContinuumIO/tranquilizer/9b4a738d1f24af7f4c2397d43454e0fe2ee5e86b/img/swagger.png)
 
 ## Tranquilize Decorator
 
