@@ -1,10 +1,10 @@
 from inspect import signature
 import re
 
-PARAM_REGEX = re.compile(":param (?P<name>[\*\w]+): (?P<doc>.*?)"
-                         "(?:(?=:param)|(?=:return)|(?=:raises)|\Z)", re.S)
-RAISE_REGEX = re.compile(":raise[s]? (?P<name>[\*\w]+): (?P<doc>.*?)"
-                         "(?:(?=:param)|(?=:return)|(?=:raise[s]?)|\Z)", re.S)
+PARAM_REGEX = re.compile(r":param (?P<name>[\*\w]+): (?P<doc>.*?)"
+                         r"(?:(?=:param)|(?=:return)|(?=:raises)|\Z)", re.S)
+RAISE_REGEX = re.compile(r":raise[s]? (?P<name>[\*\w]+): (?P<doc>.*?)"
+                         r"(?:(?=:param)|(?=:return)|(?=:raise[s]?)|\Z)", re.S)
 
 def _prepare_arg(arg):
     '''Return a keyword arg spec (dict)'''
