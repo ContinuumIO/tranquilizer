@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.7.0] - 2021-12-13
+
+### Added
+- JWT opaque token support with `--secret-key <secret-key>`
+
+### Changed
+- Dropped Python 3.5
+- Validated support for Python 3.9
+
 ## [0.6.0] - 2021-06-07
 ### Added
 - CORS support using `--allow-origin HOST:PORT` or `$TRANQUILIZER_ALLOW_ORIGIN`
