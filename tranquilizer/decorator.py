@@ -47,7 +47,7 @@ def _prepare_error_docs(docstring):
         responses = {500:messages}
         return responses, remainder
 
-    return None, remainder
+    return {}, remainder
 
 def _prepare(fn):
     """Inspects a function and return a function spec dict
@@ -89,7 +89,7 @@ def _prepare(fn):
     return spec
 
 
-def tranquilize(method='get'):
+def tranquilize(method='get', requires_authentication=None):
     """Decorator function that gets a function wraps it in order to
     append a function spec (see prepare function) and autocast args/kws
     to match types.
@@ -97,6 +97,10 @@ def tranquilize(method='get'):
     Parameters
     ----------
     :param method: str, HTTP method for this function. (default: 'get')
+    :param requires_authentication: boolean, When securing the API with --jwt-secret-key set
+                                    to False to disable authorization for this endpoint.
+                                    When set to None the endpoint is automatically protected
+                                    when using --jwt-secret-key. (default: None)
     """
 
     #just to be safe
@@ -106,12 +110,13 @@ def tranquilize(method='get'):
         f._spec = _prepare(f)
         f._method = method
         f._methods = None
+        f._requires_authentication = requires_authentication
         return f
 
     return _dart
 
 
-def publish(methods=['GET']):
+def publish(methods=['GET'], requires_authentication=None):
     """Decorator function that gets a function wraps it in order to
     append a function spec (see prepare function) and autocast args/kws
     to match types.
@@ -121,6 +126,10 @@ def publish(methods=['GET']):
     :param methods: list, HTTP methods for this function.
                     Provides compatibility with web-publisher.
                     Takes precedence over method. (default: None)
+    :param requires_authentication: boolean, When securing the API with --jwt-secret-key set
+                                    to False to disable authorization for this endpoint.
+                                    When set to None the endpoint is automatically protected
+                                    when using --jwt-secret-key. (default: None)
     """
 
     # just to be safe
@@ -130,6 +139,7 @@ def publish(methods=['GET']):
         f._spec = _prepare(f)
         f._method = None
         f._methods = methods
+        f._requires_authentication = requires_authentication
         return f
 
     return _dart

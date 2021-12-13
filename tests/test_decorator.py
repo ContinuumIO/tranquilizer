@@ -16,6 +16,7 @@ def test_attributes():
     assert hasattr(decorated, '_spec')
     assert hasattr(decorated, '_method')
     assert hasattr(decorated, '_methods')
+    assert hasattr(decorated, '_requires_authentication')
     assert decorated._methods is None
 
 
@@ -28,6 +29,7 @@ def test_publish_attributes():
     assert hasattr(decorated, '_spec')
     assert hasattr(decorated, '_method')
     assert hasattr(decorated, '_methods')
+    assert hasattr(decorated, '_requires_authentication')
     assert decorated._method is None
 
 
@@ -79,6 +81,29 @@ def test_methods():
 
     post_get = publish(methods=['GET', 'PosT'])(_funcpg)
     assert post_get._methods == ['get', 'post']
+
+
+def test_protected():
+    def _func():
+        return 0
+
+    protected = tranquilize(requires_authentication=True)(_func)
+    assert protected._requires_authentication == True
+
+    unprotected = tranquilize(requires_authentication=False)(_func)
+    assert protected._requires_authentication == False
+
+    unspecified = tranquilize()(_func)
+    assert protected._requires_authentication is None
+
+    protected_p = publish(requires_authentication=True)(_func)
+    assert protected_p._requires_authentication == True
+
+    unprotected_p = publish(requires_authentication=False)(_func)
+    assert protected_p._requires_authentication == False
+
+    unspecified_p = publish()(_func)
+    assert protected_p._requires_authentication is None
 
 
 def test_prepare():
@@ -207,5 +232,5 @@ def test_prepare_error_noerror():
 
         error_docs, remainder = _prepare_error_docs(doc)
         
-        assert error_docs is None
+        assert error_docs == {}
         assert remainder == doc
