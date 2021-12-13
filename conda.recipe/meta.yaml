@@ -17,7 +17,7 @@ build:
 
 requirements:
   run:
-   - python >=3.5, <3.10
+   - python >=3.6, <3.10
    - flask
    - werkzeug >=0.15, <2.0
    - python-dateutil
@@ -25,7 +25,7 @@ requirements:
    - flask-cors
    - flask-jwt-extended>=4
   build:
-   - python >=3.5, <3.10
+   - python >=3.6, <3.10
    - setuptools
 
 test:
