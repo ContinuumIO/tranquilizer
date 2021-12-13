@@ -42,10 +42,10 @@ setup(
     },
     classifiers=[
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "License :: OSI Approved :: BSD License",
         "Framework :: Flask",
         "Operating System :: OS Independent",
@@ -53,7 +53,7 @@ setup(
         "Intended Audience :: Developers",
         "Environment :: Web Environment"
     ],
-    python_requires=">=3.5, <3.10",
+    python_requires=">=3.6, <3.10",
     install_requires=install_requires,
     extras_require=extras_require,
     include_package_data=True,
