@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 install_requires=[
     'flask',
-    'werkzeug>=0.15,<2.0',
+    'werkzeug>=0.15,<3.0',
     'flask-restx',
     'flask-cors',
     'python-dateutil',
