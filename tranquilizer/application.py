@@ -1,12 +1,29 @@
-from flask import Flask, jsonify
-from werkzeug.middleware.proxy_fix import ProxyFix
-from flask_restx import Api, Namespace
-from flask_cors import CORS
 from os.path import join
 
+from flask import Flask, jsonify
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+from flask_jwt_extended import exceptions as jwt_ext_exceptions
+from flask_restx import Api as _Api
+from flask_restx import Namespace
+from jwt import exceptions as jwt_exceptions
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from .resource import make_resource
+
+
+class Api(_Api):
+    def error_router(self, original_handler, e):
+        """ Override original error_router to only custom errors and parsing error (from webargs)"""
+        # adapted from https://github.com/vimalloc/flask-jwt-extended/issues/141#issuecomment-569524817
+        error_type = type(e).__name__.split(".")[-1] # extract the error class name as a string
+        if self._has_fr_route() and error_type not in dir(jwt_exceptions) + dir(jwt_ext_exceptions):
+            try:
+                return self.handle_error(e)
+            except Exception:
+                pass  # Fall through to original handler
+
+        return original_handler(e)
 
 def make_app(functions, name, prefix='/', max_content_length=None, origins=None, secret_key=None):
     if secret_key:
@@ -26,7 +43,7 @@ def make_app(functions, name, prefix='/', max_content_length=None, origins=None,
     if secret_key is not None:
         app.config['JWT_SECRET_KEY'] = secret_key
         app.config['JWT_TOKEN_LOCATION'] = ['headers']
-        app.config['PROPAGATE_EXCEPTIONS'] = True
+        app.config['PROPAGATE_EXCEPTIONS'] = False
         jwt = JWTManager(app)
         @jwt.unauthorized_loader
         def unathenticated(msg):
@@ -43,7 +60,7 @@ def make_app(functions, name, prefix='/', max_content_length=None, origins=None,
                             x_host=1, x_port=1,
                             x_prefix=1)
 
-    @api.errorhandler
+    @api.errorhandler(Exception)
     def _default_error(error):
         return {'message': repr(error)}, 500
 
