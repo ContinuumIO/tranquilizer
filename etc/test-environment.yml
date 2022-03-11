@@ -3,7 +3,7 @@ channels:
   - defaults
 dependencies:
   - flask
-  - werkzeug<2
+  - werkzeug>=0.15
   - python-dateutil
   - flask-restx
   - flask-cors
