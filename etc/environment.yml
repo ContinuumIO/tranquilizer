@@ -4,7 +4,7 @@ channels:
 dependencies:
   - python=3.8
   - flask
-  - werkzeug
+  - werkzeug>=0.15
   - python-dateutil
   - flask-restx
   - pytest
@@ -16,5 +16,5 @@ dependencies:
   - ipykernel
   - requests
   - flask-jwt-extended>=4
-  - werkzeug<2
+  - werkzeug
   - flask-cors
