@@ -34,7 +34,7 @@ setup(
     platforms=['Windows', 'Mac OS X', 'Linux'],
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
-    packages=find_packages(),
+    packages=find_packages(exclude=['tests']),
     entry_points={
         'console_scripts': [
             'tranquilizer = tranquilizer.main:run'

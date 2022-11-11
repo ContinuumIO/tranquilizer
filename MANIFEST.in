@@ -7,3 +7,5 @@ include MANIFEST.in
 
 include versioneer.py
 include tranquilizer/_version.py
+
+graft tests
