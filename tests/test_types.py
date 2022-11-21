@@ -1,7 +1,7 @@
 import pytest
 
 from tranquilizer.decorator import tranquilize, publish
-from tranquilizer.types import File, TextFile, Image, NDArray
+from tranquilizer.types import File, TextFile, Image, NDArray, Boolean
 from tranquilizer.types import dt_factory, list_factory
 from tranquilizer.types import is_container, is_list_subclass
 from tranquilizer.types import type_mapper
@@ -77,8 +77,9 @@ def test_dt_factory():
 def test_type_mapper_builtins():
     assert int is type_mapper(int)
     assert float is type_mapper(float)
-    assert bool is type_mapper(bool)
     assert str is type_mapper(str)
+    # Booleans are a special case and have a custom wrapper
+    assert not bool is type_mapper(bool)
 
 def test_type_mapper_date():
     dm = type_mapper(datetime.date)
@@ -154,4 +155,11 @@ def test_image_file():
     assert isinstance(img, PIL.Image.Image)
     attrs = ['__location__', '__schema__', '__description__']
     assert all([hasattr(TextFile, a) for a in attrs])
-    
+
+def test_boolean():
+    for falsey in ['false', 0, "0", False]:
+        b = Boolean(falsey)
+        assert not b
+    for truey in ['true', 1, "1", True]:
+        b = Boolean(truey)
+        assert b
