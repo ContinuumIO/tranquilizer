@@ -4,7 +4,7 @@ from datetime import datetime, date
 from typing import TextIO, BinaryIO
 from werkzeug.datastructures import FileStorage
 from flask_restx.reqparse import PY_TYPES
-from flask_restx import fields
+from flask_restx import inputs
 import io
 
 def is_container(type_):
@@ -30,6 +30,13 @@ def is_list_subclass(type_):
         return issubclass(type_.__origin__, list)
     else:
         return issubclass(type_, list)
+
+
+class Boolean():
+    '''Thin wrapper for flask_restx.inputs.boolean'''
+    __schema__ = inputs.boolean.__schema__
+    def __new__(cls, value):
+        return inputs.boolean(value)
 
 
 class File(FileStorage):
@@ -151,5 +158,7 @@ def type_mapper(type_):
         return Image
     elif has_numpy and issubclass(type_, np.ndarray):
         return NDArray
+    elif issubclass(type_, bool):
+        return Boolean
     else:
         return type_
